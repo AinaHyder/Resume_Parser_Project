@@ -1,5 +1,5 @@
-# Resume_Parser_Project
-### Resume Parser Project
+# Resume Parser Project
+
 
 ## Overview
 
