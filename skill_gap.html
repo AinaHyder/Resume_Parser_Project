@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill Gap Analyzer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body { background-color: #f5f7fa; color: #333; line-height: 1.6; }
+    header {
+      background: linear-gradient(135deg, #6e57e0, #8a49ff);
+      color: white; padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: bold; }
+    .logo i { margin-right: 10px; font-size: 1.8rem; }
+    nav ul { display: flex; list-style: none; }
+    nav ul li { margin-left: 1.5rem; }
+    nav ul li a {
+      color: white; text-decoration: none; padding: 0.5rem 1rem;
+      border-radius: 4px; transition: background-color 0.3s;
+    }
+    nav ul li a:hover, nav ul li a.active {
+      background-color: rgba(255,255,255,0.2);
+    }
+    .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { text-align: center; color: #6e57e0; margin-bottom: 2rem; }
+    .skill-gap-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .input-section, .output-section {
+      background: white; padding: 1.5rem; border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    .resume-select {
+      width: 100%; padding: 0.8rem 1rem; border: 1px solid #ddd;
+      border-radius: 4px; font-size: 1rem; margin-bottom: 1rem;
+    }
+    textarea {
+      width: 100%; padding: 12px; margin: 10px 0 20px; border: 1px solid #ccc;
+      border-radius: 6px; min-height: 100px; resize: vertical;
+    }
+    button {
+      background-color: #6e57e0; color: white; border: none;
+      padding: 0.8rem 1.5rem; border-radius: 4px; cursor: pointer;
+      font-size: 1rem; display: inline-flex; align-items: center;
+    }
+    button i { margin-right: 0.5rem; }
+    button:hover { background-color: #5a46c7; }
+    .skill-card {
+      background: #ecf6fd; padding: 15px; border-left: 6px solid #3498db;
+      margin-bottom: 15px; border-radius: 6px;
+    }
+    .course-link { color: #1e88e5; text-decoration: none; }
+    .course-link:hover { text-decoration: underline; }
+    .chart-container { margin-top: 2rem; height: 300px; }
+    .skill-tag {
+      background-color: rgba(110,87,224,0.1); color: #6e57e0;
+      padding: 0.3rem 0.8rem; border-radius: 20px;
+      display: inline-block; margin: 0.2rem;
+    }
+    .loading-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.7); display: none;
+      flex-direction: column; justify-content: center; align-items: center;
+      z-index: 1000;
+    }
+    .spinner {
+      width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.3);
+      border-radius: 50%; border-top-color: #6e57e0;
+      animation: spin 1s linear infinite; margin-bottom: 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .error-message {
+      background-color: #ffebee; color: #c62828; padding: 1rem;
+      border-radius: 4px; margin-bottom: 1rem; display: none;
+    }
+    footer {
+      background-color: #333; color: white; text-align: center;
+      padding: 1.5rem; margin-top: 2rem;
+    }
+    @media (max-width: 768px) {
+      .skill-gap-container { grid-template-columns: 1fr; }
+      header { flex-direction: column; text-align: center; }
+      nav ul { margin-top: 1rem; justify-content: center; }
+    }
+    .resume-option {
+      display: flex; justify-content: space-between;
+    }
+    .resume-email {
+      color: #666; font-size: 0.9em;
+    }
+    .no-resumes {
+      color: #d32f2f; padding: 1rem;
+      background: #ffebee; border-radius: 4px;
+    }
+    .match-percentage {
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 1rem 0;
+    }
+    .match-good { color: #4caf50; }
+    .match-medium { color: #ff9800; }
+    .match-poor { color: #f44336; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <i class="fas fa-file-alt"></i>
+      <span>Resume Analyzer</span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="/dashboard"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+        <li><a href="/form"><i class="fas fa-wpforms"></i> Application Form</a></li>
+        <li><a href="/skill_gap" class="active"><i class="fas fa-chart-line"></i> Skill Gap</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Skill Gap Analyzer</h1>
+    
+    <div class="skill-gap-container">
+      <div class="input-section">
+        <h2>Input Information</h2>
+        <div id="error-message" class="error-message"></div>
+        
+        <label for="resume-select">Select Your Resume:</label>
+        <select id="resume-select" class="resume-select">
+          <option value="">Loading resumes...</option>
+        </select>
+
+        <label for="job-role">Select Job Role:</label>
+        <select id="job-role" class="resume-select">
+          <option value="">Select a job role...</option>
+          <option value="Frontend Developer">Frontend Developer</option>
+          <option value="Backend Developer">Backend Developer</option>
+          <option value="Full Stack Developer">Full Stack Developer</option>
+          <option value="Data Scientist">Data Scientist</option>
+          <option value="DevOps Engineer">DevOps Engineer</option>
+          <option value="Mobile Developer">Mobile Developer</option>
+          <option value="UI/UX Designer">UI/UX Designer</option>
+          <option value="Blockchain Developer">Blockchain Developer</option>
+        </select>
+
+        <label for="custom-skills">Or Enter Custom Skills (comma-separated):</label>
+        <textarea id="custom-skills" placeholder="Example: Python, Angular, Next.js"></textarea>
+        
+        <button id="analyze-btn">
+          <i class="fas fa-search"></i> Analyze Skill Gap
+        </button>
+      </div>
+
+      <div class="output-section">
+        <h2>Analysis Results</h2>
+        <div id="results-container" style="display: none;">
+          <div class="match-percentage" id="match-percentage">0%</div>
+          
+          <div>
+            <h3>Your Skills</h3>
+            <div id="resume-skills" class="skills-container">
+              <p>Select a resume to view skills</p>
+            </div>
+          </div>
+          
+          <div>
+            <h3>Missing Skills & Recommended Courses</h3>
+            <div id="missing-skills">
+              <p>Complete analysis to see results</p>
+            </div>
+          </div>
+          
+          <div class="chart-container">
+            <canvas id="skills-chart"></canvas>
+          </div>
+        </div>
+        
+        <div id="no-results-container">
+          <p>Select a resume and job role or enter custom skills, then click "Analyze Skill Gap" to see results.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <p id="loading-text">Processing...</p>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Resume Analyzer</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const resumeSelect = document.getElementById('resume-select');
+      const jobRoleSelect = document.getElementById('job-role');
+      const customSkills = document.getElementById('custom-skills');
+      const analyzeBtn = document.getElementById('analyze-btn');
+      const loadingOverlay = document.getElementById('loading-overlay');
+      const loadingText = document.getElementById('loading-text');
+      const errorMessage = document.getElementById('error-message');
+      const resultsContainer = document.getElementById('results-container');
+      const noResultsContainer = document.getElementById('no-results-container');
+      const matchPercentage = document.getElementById('match-percentage');
+      let skillsChart = null;
+
+      // Load resumes on page load
+      loadResumes();
+
+      async function loadResumes() {
+        showLoading("Loading resumes...");
+        try {
+          const response = await fetch('/get_resumes');
+          if (!response.ok) throw new Error('Failed to load resumes');
+          
+          const resumes = await response.json();
+          resumeSelect.innerHTML = '<option value="">Select a resume...</option>';
+          
+          if (resumes.length === 0) {
+            showError('No resumes found. Please upload a resume first.');
+            return;
+          }
+
+          resumes.forEach(resume => {
+            const option = document.createElement('option');
+            option.value = resume._id;
+            
+            let name = resume["Full Name"] || "Unnamed Resume";
+            let email = resume["Email Address"] ? `(${resume["Email Address"]})` : "";
+            
+            option.textContent = `${name} ${email}`;
+            resumeSelect.appendChild(option);
+          });
+
+          // Check URL for resume ID
+          const urlParams = new URLSearchParams(window.location.search);
+          const resumeId = urlParams.get('resume');
+          if (resumeId) {
+            resumeSelect.value = resumeId;
+            loadResumeSkills(resumeId);
+          }
+        } catch (error) {
+          showError('Failed to load resumes. Please refresh the page.');
+          console.error('Error:', error);
+        } finally {
+          hideLoading();
+        }
+      }
+
+      // Load resume skills when a resume is selected
+      resumeSelect.addEventListener('change', function() {
+        const resumeId = this.value;
+        if (resumeId) {
+          loadResumeSkills(resumeId);
+        } else {
+          document.getElementById('resume-skills').innerHTML = '<p>Select a resume to view skills</p>';
+        }
+      });
+
+      async function loadResumeSkills(resumeId) {
+        showLoading("Loading resume skills...");
+        try {
+          const response = await fetch(`/get_resume/${resumeId}`);
+          if (!response.ok) throw new Error('Failed to load resume');
+          
+          const resume = await response.json();
+          const resumeSkillsDiv = document.getElementById('resume-skills');
+          
+          if (resume.Skills && resume.Skills.Technical && resume.Skills.Technical.length > 0) {
+            resumeSkillsDiv.innerHTML = resume.Skills.Technical
+              .map(skill => `<span class="skill-tag">${skill}</span>`)
+              .join(' ');
+          } else {
+            resumeSkillsDiv.innerHTML = '<p>No skills found in resume</p>';
+          }
+        } catch (error) {
+          showError('Failed to load resume skills. Please try again.');
+          console.error('Error:', error);
+        } finally {
+          hideLoading();
+        }
+      }
+
+      analyzeBtn.addEventListener('click', analyzeSkillGap);
+
+      async function analyzeSkillGap() {
+        const resumeId = resumeSelect.value;
+        const jobRole = jobRoleSelect.value;
+        const customSkillsText = customSkills.value.trim();
+        
+        if (!resumeId) {
+          showError('Please select a resume');
+          return;
+        }
+        
+        if (!jobRole && !customSkillsText) {
+          showError('Please select a job role or enter custom skills');
+          return;
+        }
+
+        hideError();
+        showLoading("Analyzing skill gap...");
+        
+        try {
+          let response;
+          
+          if (jobRole) {
+            // Use predefined job role
+            response = await fetch(`/get_skill_gap/${resumeId}/${encodeURIComponent(jobRole)}`);
+          } else {
+            // Use custom skills
+            const jobSkills = customSkillsText.split(',')
+              .map(skill => skill.trim())
+              .filter(skill => skill);
+              
+            if (jobSkills.length === 0) {
+              showError('Please enter valid skills');
+              hideLoading();
+              return;
+            }
+            
+            response = await fetch('/skill_gap_analysis', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                resume_id: resumeId,
+                job_skills: jobSkills
+              })
+            });
+          }
+
+          if (!response.ok) throw new Error('Analysis failed');
+          const data = await response.json();
+          
+          displayResults(data);
+        } catch (error) {
+          showError('Analysis failed. Please try again.');
+          console.error('Error:', error);
+        } finally {
+          hideLoading();
+        }
+      }
+
+      function displayResults(data) {
+        // Show results container
+        resultsContainer.style.display = 'block';
+        noResultsContainer.style.display = 'none';
+        
+        // Update match percentage
+        matchPercentage.textContent = `${data.match_percentage}%`;
+        
+        // Set color based on percentage
+        if (data.match_percentage >= 70) {
+          matchPercentage.className = 'match-percentage match-good';
+        } else if (data.match_percentage >= 40) {
+          matchPercentage.className = 'match-percentage match-medium';
+        } else {
+          matchPercentage.className = 'match-percentage match-poor';
+        }
+        
+        // Display missing skills
+        const missingSkillsDiv = document.getElementById('missing-skills');
+        if (data.missing_skills && data.missing_skills.length > 0) {
+          missingSkillsDiv.innerHTML = data.missing_skills.map(skill => {
+            // Find course recommendation for this skill
+            let courseLink = '';
+            let courseTitle = '';
+            
+            // Check if we have course recommendations from the API
+            if (data.course_recommendations && data.course_recommendations[skill]) {
+              courseLink = data.course_recommendations[skill];
+              courseTitle = 'Recommended Course';
+            } else {
+              // Fallback to hardcoded course recommendations
+              const courseMap = {
+                'Python': { url: 'https://www.udemy.com/course/complete-python-bootcamp/', title: 'Complete Python Bootcamp' },
+                'Java': { url: 'https://www.udemy.com/course/java-the-complete-java-developer-course/', title: 'Java Programming Masterclass' },
+                'JavaScript': { url: 'https://www.udemy.com/course/the-complete-javascript-course/', title: 'The Complete JavaScript Course' },
+                'React': { url: 'https://www.udemy.com/course/react-the-complete-guide-incl-redux/', title: 'React - The Complete Guide' },
+                'Angular': { url: 'https://www.udemy.com/course/the-complete-guide-to-angular-2/', title: 'Angular - The Complete Guide' },
+                'Vue.js': { url: 'https://www.udemy.com/course/vuejs-2-the-complete-guide/', title: 'Vue.js - The Complete Guide' },
+                'Node.js': { url: 'https://www.udemy.com/course/nodejs-the-complete-guide/', title: 'Node.js - The Complete Guide' },
+                'SQL': { url: 'https://www.udemy.com/course/the-complete-sql-bootcamp/', title: 'The Complete SQL Bootcamp' },
+                'NoSQL': { url: 'https://www.udemy.com/course/mongodb-the-complete-developers-guide/', title: 'MongoDB - The Complete Guide' },
+                'MongoDB': { url: 'https://www.udemy.com/course/mongodb-the-complete-developers-guide/', title: 'MongoDB - The Complete Guide' },
+                'AWS': { url: 'https://www.udemy.com/course/aws-certified-solutions-architect-associate/', title: 'AWS Certified Solutions Architect' },
+                'Docker': { url: 'https://www.udemy.com/course/docker-and-kubernetes-the-complete-guide/', title: 'Docker and Kubernetes' },
+                'Kubernetes': { url: 'https://www.udemy.com/course/kubernetes-microservices/', title: 'Kubernetes for Microservices' },
+                'Machine Learning': { url: 'https://www.coursera.org/learn/machine-learning', title: 'Machine Learning by Andrew Ng' },
+                'Deep Learning': { url: 'https://www.coursera.org/specializations/deep-learning', title: 'Deep Learning Specialization' },
+                'Blockchain': { url: 'https://www.udemy.com/course/blockchain-developer/', title: 'Blockchain Developer Bootcamp' },
+                'Solidity': { url: 'https://www.udemy.com/course/ethereum-and-solidity-the-complete-developers-guide/', title: 'Ethereum and Solidity' },
+                'Web3': { url: 'https://www.udemy.com/course/web3-blockchain-developer/', title: 'Web3 Development' },
+                'API Design': { url: 'https://www.udemy.com/course/nodejs-api-masterclass/', title: 'Node.js API Masterclass' },
+                'Authentication': { url: 'https://www.udemy.com/course/nodejs-the-complete-guide/', title: 'Node.js Authentication' },
+                'Security': { url: 'https://www.udemy.com/course/web-security-essentials/', title: 'Web Security Essentials' },
+                'Microservices': { url: 'https://www.udemy.com/course/microservices-with-node-js-and-react/', title: 'Microservices with Node and React' },
+                'Cloud Services': { url: 'https://www.udemy.com/course/aws-certified-solutions-architect-associate/', title: 'AWS Cloud Services' },
+                'Git': { url: 'https://www.udemy.com/course/git-complete/', title: 'Git Complete: The definitive guide' },
+                'Testing': { url: 'https://www.udemy.com/course/javascript-unit-testing-the-practical-guide/', title: 'JavaScript Unit Testing' },
+                'CI/CD': { url: 'https://www.udemy.com/course/devops-with-docker-kubernetes-and-azure-devops/', title: 'DevOps CI/CD Pipeline' }
+              };
+              
+              // Check for exact match
+              if (courseMap[skill]) {
+                courseLink = courseMap[skill].url;
+                courseTitle = courseMap[skill].title;
+              } else {
+                // Check for partial match
+                for (const [key, value] of Object.entries(courseMap)) {
+                  if (skill.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(skill.toLowerCase())) {
+                    courseLink = value.url;
+                    courseTitle = value.title;
+                    break;
+                  }
+                }
+              }
+            }
+            
+            return `
+              <div class="skill-card">
+                <strong>${skill}</strong>
+                ${courseLink ? 
+                  `<div><a href="${courseLink}" target="_blank" class="course-link">
+                    <i class="fas fa-external-link-alt"></i> ${courseTitle}
+                  </a></div>` : 
+                  '<div>No specific course recommendation available</div>'}
+              </div>
+            `;
+          }).join('');
+        } else {
+          missingSkillsDiv.innerHTML = '<p>No missing skills found! You have all the required skills.</p>';
+        }
+
+        // Update chart
+        updateChart(data);
+      }
+
+      function updateChart(data) {
+        const ctx = document.getElementById('skills-chart').getContext('2d');
+        
+        if (skillsChart) {
+          skillsChart.destroy();
+        }
+
+        const matchingCount = data.matching_skills ? data.matching_skills.length : 0;
+        const missingCount = data.missing_skills ? data.missing_skills.length : 0;
+
+        skillsChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Matching Skills', 'Missing Skills'],
+            datasets: [{
+              data: [matchingCount, missingCount],
+              backgroundColor: ['#4caf50', '#f44336']
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom'
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const label = context.label || '';
+                    const value = context.raw || 0;
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = Math.round((value / total) * 100);
+                    return `${label}: ${value} (${percentage}%)`;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+
+      function showLoading(message) {
+        loadingText.textContent = message || 'Processing...';
+        loadingOverlay.style.display = 'flex';
+      }
+
+      function hideLoading() {
+        loadingOverlay.style.display = 'none';
+      }
+
+      function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+        setTimeout(() => {
+          errorMessage.style.display = 'none';
+        }, 5000);
+      }
+
+      function hideError() {
+        errorMessage.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

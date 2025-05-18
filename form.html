@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #6e57e0, #8a49ff);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        nav ul li a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+        }
+        
+        /* Main Content Styles */
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #6e57e0;
+            margin-bottom: 2rem;
+        }
+        
+        /* Form Styles */
+        .form-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-card h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .form-section h3 {
+            color: #6e57e0;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #6e57e0;
+            box-shadow: 0 0 0 2px rgba(110, 87, 224, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        /* Auto-fill Section */
+        .auto-fill-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .resume-select {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        /* Dynamic Form Elements */
+        .dynamic-section {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .remove-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: transparent;
+            border: none;
+            color: #f44336;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .add-btn {
+            background-color: transparent;
+            border: 1px solid #6e57e0;
+            color: #6e57e0;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .add-btn i {
+            margin-right: 0.5rem;
+        }
+        
+        .add-btn:hover {
+            background-color: rgba(110, 87, 224, 0.1);
+        }
+        
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .btn i {
+            margin-right: 0.5rem;
+        }
+        
+        .btn-primary {
+            background-color: #6e57e0;
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #5a46c7;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: #6e57e0;
+            border: 1px solid #6e57e0;
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(110, 87, 224, 0.1);
+        }
+        
+        /* Success Message */
+        .success-message {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .success-icon i {
+            font-size: 3rem;
+        }
+        
+        .success-message h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .success-message p {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .success-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #6e57e0;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .loading-overlay p {
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        /* Error message */
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4caf50;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            transform: translateX(110%);
+            transition: transform 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast-content {
+            display: flex;
+            align-items: center;
+        }
+        
+        .toast-content i {
+            margin-right: 0.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+            }
+            
+            nav ul li {
+                margin-left: 0.5rem;
+                margin-right: 0.5rem;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .auto-fill-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-file-alt"></i>
+            <span>Smart Resume Parser</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/dashboard"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+                <li><a href="/form" class="active"><i class="fas fa-wpforms"></i> Application Form</a></li>
+                <li><a href="/skill_gap"><i class="fas fa-chart-line"></i> Skill Gap</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Job Application Form</h1>
+
+        <div id="form-container">
+            <div class="form-card">
+                <h2>Auto-Fill from Resume</h2>
+                <div id="error-message" class="error-message"></div>
+                <div class="auto-fill-section">
+                    <select id="resume-select" class="resume-select">
+                        <option value="">Select a resume...</option>
+                        <!-- Resume options will be populated here -->
+                    </select>
+                    <button id="auto-fill-btn" class="btn btn-outline">
+                        <i class="fas fa-magic"></i> Auto-Fill Form
+                    </button>
+                </div>
+            </div>
+
+            <form id="application-form">
+                <!-- Personal Information -->
+                <div class="form-card">
+                    <h2>Personal Information</h2>
+                    <div class="form-section">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="full-name">Full Name *</label>
+                                <input type="text" id="full-name" name="fullName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="location">Location *</label>
+                                <input type="text" id="location" name="location" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="linkedin">LinkedIn Profile</label>
+                                <input type="url" id="linkedin" name="linkedin" class="form-control" placeholder="https://www.linkedin.com/in/username">
+                            </div>
+                            <div class="form-group">
+                                <label for="github">GitHub Profile</label>
+                                <input type="url" id="github" name="github" class="form-control" placeholder="https://github.com/username">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div class="form-card">
+                    <h2>Education</h2>
+                    <div class="form-section">
+                        <div id="education-container">
+                            <!-- Education fields will be added here -->
+                            <div class="dynamic-section">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="degree-0">Degree *</label>
+                                        <input type="text" id="degree-0" name="degree[]" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="institution-0">Institution *</label>
+                                        <input type="text" id="institution-0" name="institution[]" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="years-0">Years *</label>
+                                        <input type="text" id="years-0" name="years[]" class="form-control" placeholder="e.g., 2018-2022" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="field-0">Field of Study *</label>
+                                        <input type="text" id="field-0" name="field[]" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="add-education" class="add-btn">
+                            <i class="fas fa-plus"></i> Add Education
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Work Experience -->
+                <div class="form-card">
+                    <h2>Work Experience</h2>
+                    <div class="form-section">
+                        <div id="experience-container">
+                            <!-- Experience fields will be added here -->
+                            <div class="dynamic-section">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="company-0">Company *</label>
+                                        <input type="text" id="company-0" name="company[]" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="role-0">Role *</label>
+                                        <input type="text" id="role-0" name="role[]" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="exp-years-0">Years *</label>
+                                        <input type="text" id="exp-years-0" name="expYears[]" class="form-control" placeholder="e.g., 2020-Present" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="responsibilities-0">Responsibilities *</label>
+                                    <textarea id="responsibilities-0" name="responsibilities[]" class="form-control" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="add-experience" class="add-btn">
+                            <i class="fas fa-plus"></i> Add Work Experience
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Skills & Additional Information -->
+                <div class="form-card">
+                    <h2>Skills & Additional Information</h2>
+                    <div class="form-section">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="technical-skills">Technical Skills *</label>
+                                <textarea id="technical-skills" name="technicalSkills" class="form-control" placeholder="Separate skills with commas" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="soft-skills">Soft Skills</label>
+                                <textarea id="soft-skills" name="softSkills" class="form-control" placeholder="Separate skills with commas"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="certifications">Certifications</label>
+                                <textarea id="certifications" name="certifications" class="form-control" placeholder="Separate certifications with commas"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="cover-letter">Cover Letter</label>
+                                <textarea id="cover-letter" name="coverLetter" class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="reset-btn" class="btn btn-outline">
+                        <i class="fas fa-undo"></i> Reset Form
+                    </button>
+                    <button type="submit" id="submit-btn" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="success-container" style="display: none;">
+            <div class="form-card">
+                <div class="success-message">
+                    <div class="success-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h2>Application Submitted Successfully!</h2>
+                    <p>Thank you for your application. We will review it and get back to you soon.</p>
+                    <div class="success-actions">
+                        <a href="/" class="btn btn-outline">
+                            <i class="fas fa-home"></i> Back to Home
+                        </a>
+                        <a href="/dashboard" class="btn btn-primary">
+                            <i class="fas fa-chart-bar"></i> View Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <p id="loading-text">Loading...</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Smart Resume Parser & Career Recommendation. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const resumeSelect = document.getElementById('resume-select');
+            const autoFillBtn = document.getElementById('auto-fill-btn');
+            const applicationForm = document.getElementById('application-form');
+            const resetBtn = document.getElementById('reset-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const formContainer = document.getElementById('form-container');
+            const successContainer = document.getElementById('success-container');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const loadingText = document.getElementById('loading-text');
+            const errorMessage = document.getElementById('error-message');
+            const educationContainer = document.getElementById('education-container');
+            const experienceContainer = document.getElementById('experience-container');
+            const addEducationBtn = document.getElementById('add-education');
+            const addExperienceBtn = document.getElementById('add-experience');
+            
+            // Variables
+            let educationCount = 1;
+            let experienceCount = 1;
+            
+            // Check if resume ID is in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const resumeIdFromUrl = urlParams.get('resume');
+            
+            // Load resumes for dropdown
+            loadResumes();
+            
+            // Event Listeners
+            autoFillBtn.addEventListener('click', autoFillForm);
+            resetBtn.addEventListener('click', resetForm);
+            applicationForm.addEventListener('submit', submitForm);
+            addEducationBtn.addEventListener('click', addEducation);
+            addExperienceBtn.addEventListener('click', addExperience);
+            
+            // Load resumes for dropdown
+            function loadResumes() {
+                showLoading('Loading resumes...');
+                
+                fetch('/get_resumes')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(resumes => {
+                        hideLoading();
+                        
+                        if (resumes.length === 0) {
+                            resumeSelect.innerHTML = '<option value="">No resumes available</option>';
+                            autoFillBtn.disabled = true;
+                            showError('No resumes found. Please upload a resume first.');
+                            return;
+                        }
+                        
+                        // Populate dropdown
+                        let options = '<option value="">Select a resume...</option>';
+                        
+                        resumes.forEach(resume => {
+                            const name = resume["Full Name"] || 'Unnamed';
+                            const email = resume["Email Address"] || 'No email';
+                            options += `<option value="${resume._id}">${name} - ${email}</option>`;
+                        });
+                        
+                        resumeSelect.innerHTML = options;
+                        
+                        // If resume ID is in URL, select it
+                        if (resumeIdFromUrl) {
+                            resumeSelect.value = resumeIdFromUrl;
+                            autoFillForm();
+                        }
+                        
+                        // Check if resume ID is in localStorage
+                        const resumeIdFromStorage = localStorage.getItem('resumeId');
+                        if (resumeIdFromStorage && !resumeIdFromUrl) {
+                            resumeSelect.value = resumeIdFromStorage;
+                        }
+                    })
+                    .catch(error => {
+                        hideLoading();
+                        console.error('Error:', error);
+                        showError('Error loading resumes. Please try again later.');
+                    });
+            }
+            
+            // Auto-fill form
+            function autoFillForm() {
+                const resumeId = resumeSelect.value;
+                
+                if (!resumeId) {
+                    showError('Please select a resume first.');
+                    return;
+                }
+                
+                hideError();
+                showLoading('Loading resume data...');
+                
+                fetch(`/get_resume/${resumeId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(resume => {
+                        hideLoading();
+                        
+                        if (resume.error) {
+                            showError(resume.error);
+                            return;
+                        }
+                        
+                        // Fill personal information
+                        document.getElementById('full-name').value = resume["Full Name"] || '';
+                        document.getElementById('email').value = resume["Email Address"] || '';
+                        document.getElementById('phone').value = resume["Contact Number"] || '';
+                        document.getElementById('location').value = resume["Location"] || '';
+                        document.getElementById('linkedin').value = resume["LinkedIn"] || '';
+                        document.getElementById('github').value = resume["GitHub"] || '';
+                        
+                        // Fill education
+                        if (resume.Education && resume.Education.length > 0) {
+                            // Clear existing education fields except the first one
+                            while (educationContainer.children.length > 1) {
+                                educationContainer.removeChild(educationContainer.lastChild);
+                            }
+                            
+                            // Fill first education field
+                            document.getElementById('degree-0').value = resume.Education[0].Degree || '';
+                            document.getElementById('institution-0').value = resume.Education[0].Institution || '';
+                            document.getElementById('years-0').value = resume.Education[0].Years || '';
+                            document.getElementById('field-0').value = resume.Education[0].Field || '';
+                            
+                            // Add additional education fields if needed
+                            for (let i = 1; i < resume.Education.length; i++) {
+                                addEducation();
+                                document.getElementById(`degree-${i}`).value = resume.Education[i].Degree || '';
+                                document.getElementById(`institution-${i}`).value = resume.Education[i].Institution || '';
+                                document.getElementById(`years-${i}`).value = resume.Education[i].Years || '';
+                                document.getElementById(`field-${i}`).value = resume.Education[i].Field || '';
+                            }
+                        }
+                        
+                        // Fill work experience
+                        if (resume["Work Experience"] && resume["Work Experience"].length > 0) {
+                            // Clear existing experience fields except the first one
+                            while (experienceContainer.children.length > 1) {
+                                experienceContainer.removeChild(experienceContainer.lastChild);
+                            }
+                            
+                            // Fill first experience field
+                            document.getElementById('company-0').value = resume["Work Experience"][0].Company || '';
+                            document.getElementById('role-0').value = resume["Work Experience"][0].Role || '';
+                            document.getElementById('exp-years-0').value = resume["Work Experience"][0].Years || '';
+                            document.getElementById('responsibilities-0').value = resume["Work Experience"][0].Description || '';
+                            
+                            // Add additional experience fields if needed
+                            for (let i = 1; i < resume["Work Experience"].length; i++) {
+                                addExperience();
+                                document.getElementById(`company-${i}`).value = resume["Work Experience"][i].Company || '';
+                                document.getElementById(`role-${i}`).value = resume["Work Experience"][i].Role || '';
+                                document.getElementById(`exp-years-${i}`).value = resume["Work Experience"][i].Years || '';
+                                document.getElementById(`responsibilities-${i}`).value = resume["Work Experience"][i].Description || '';
+                            }
+                        }
+                        
+                        // Fill skills
+                        document.getElementById('technical-skills').value = resume.Skills && resume.Skills.Technical ? resume.Skills.Technical.join(', ') : '';
+                        document.getElementById('soft-skills').value = resume.Skills && resume.Skills.Soft ? resume.Skills.Soft.join(', ') : '';
+                        
+                        // Show success message
+                        showSuccess('Form auto-filled successfully!');
+                    })
+                    .catch(error => {
+                        hideLoading();
+                        console.error('Error:', error);
+                        showError('Error auto-filling form. Please try again later.');
+                    });
+            }
+            
+            // Add education field
+            function addEducation() {
+                const educationField = document.createElement('div');
+                educationField.className = 'dynamic-section';
+                educationField.innerHTML = `
+                    <button type="button" class="remove-btn" onclick="removeEducation(this)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="degree-${educationCount}">Degree *</label>
+                            <input type="text" id="degree-${educationCount}" name="degree[]" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="institution-${educationCount}">Institution *</label>
+                            <input type="text" id="institution-${educationCount}" name="institution[]" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="years-${educationCount}">Years *</label>
+                            <input type="text" id="years-${educationCount}" name="years[]" class="form-control" placeholder="e.g., 2018-2022" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="field-${educationCount}">Field of Study *</label>
+                            <input type="text" id="field-${educationCount}" name="field[]" class="form-control" required>
+                        </div>
+                    </div>
+                `;
+                
+                educationContainer.appendChild(educationField);
+                educationCount++;
+            }
+            
+            // Remove education field
+            window.removeEducation = function(button) {
+                const section = button.parentElement;
+                educationContainer.removeChild(section);
+            };
+            
+            // Add experience field
+            function addExperience() {
+                const experienceField = document.createElement('div');
+                experienceField.className = 'dynamic-section';
+                experienceField.innerHTML = `
+                    <button type="button" class="remove-btn" onclick="removeExperience(this)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="company-${experienceCount}">Company *</label>
+                            <input type="text" id="company-${experienceCount}" name="company[]" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="role-${experienceCount}">Role *</label>
+                            <input type="text" id="role-${experienceCount}" name="role[]" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="exp-years-${experienceCount}">Years *</label>
+                            <input type="text" id="exp-years-${experienceCount}" name="expYears[]" class="form-control" placeholder="e.g., 2020-Present" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="responsibilities-${experienceCount}">Responsibilities *</label>
+                        <textarea id="responsibilities-${experienceCount}" name="responsibilities[]" class="form-control" required></textarea>
+                    </div>
+                `;
+                
+                experienceContainer.appendChild(experienceField);
+                experienceCount++;
+            }
+            
+            // Remove experience field
+            window.removeExperience = function(button) {
+                const section = button.parentElement;
+                experienceContainer.removeChild(section);
+            };
+            
+            // Reset form
+            function resetForm() {
+                applicationForm.reset();
+                
+                // Reset education fields
+                while (educationContainer.children.length > 1) {
+                    educationContainer.removeChild(educationContainer.lastChild);
+                }
+                
+                // Reset experience fields
+                while (experienceContainer.children.length > 1) {
+                    experienceContainer.removeChild(experienceContainer.lastChild);
+                }
+                
+                // Reset counters
+                educationCount = 1;
+                experienceCount = 1;
+                
+                // Clear first fields
+                document.getElementById('degree-0').value = '';
+                document.getElementById('institution-0').value = '';
+                document.getElementById('years-0').value = '';
+                document.getElementById('field-0').value = '';
+                document.getElementById('company-0').value = '';
+                document.getElementById('role-0').value = '';
+                document.getElementById('exp-years-0').value = '';
+                document.getElementById('responsibilities-0').value = '';
+            }
+            
+            // Submit form
+            function submitForm(e) {
+                e.preventDefault();
+                
+                // Validate form
+                if (!applicationForm.checkValidity()) {
+                    applicationForm.reportValidity();
+                    return;
+                }
+                
+                // Collect form data
+                const formData = {
+                    personalInfo: {
+                        fullName: document.getElementById('full-name').value,
+                        email: document.getElementById('email').value,
+                        phone: document.getElementById('phone').value,
+                        location: document.getElementById('location').value,
+                        linkedin: document.getElementById('linkedin').value,
+                        github: document.getElementById('github').value
+                    },
+                    education: [],
+                    workExperience: [],
+                    skills: {
+                        technical: document.getElementById('technical-skills').value.split(',').map(s => s.trim()).filter(Boolean),
+                        soft: document.getElementById('soft-skills').value.split(',').map(s => s.trim()).filter(Boolean)
+                    },
+                    certifications: document.getElementById('certifications').value.split(',').map(s => s.trim()).filter(Boolean),
+                    coverLetter: document.getElementById('cover-letter').value,
+                    resumeId: resumeSelect.value || null
+                };
+                
+                // Collect education data
+                const degrees = document.querySelectorAll('input[name="degree[]"]');
+                const institutions = document.querySelectorAll('input[name="institution[]"]');
+                const years = document.querySelectorAll('input[name="years[]"]');
+                const fields = document.querySelectorAll('input[name="field[]"]');
+                
+                for (let i = 0; i < degrees.length; i++) {
+                    formData.education.push({
+                        degree: degrees[i].value,
+                        institution: institutions[i].value,
+                        years: years[i].value,
+                        field: fields[i].value
+                    });
+                }
+                
+                // Collect work experience data
+                const companies = document.querySelectorAll('input[name="company[]"]');
+                const roles = document.querySelectorAll('input[name="role[]"]');
+                const expYears = document.querySelectorAll('input[name="expYears[]"]');
+                const responsibilities = document.querySelectorAll('textarea[name="responsibilities[]"]');
+                
+                for (let i = 0; i < companies.length; i++) {
+                    formData.workExperience.push({
+                        company: companies[i].value,
+                        role: roles[i].value,
+                        years: expYears[i].value,
+                        responsibilities: responsibilities[i].value
+                    });
+                }
+                
+                // Submit form data
+                showLoading('Submitting application...');
+                
+                fetch('/save_application', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    hideLoading();
+                    
+                    if (data.error) {
+                        showError(data.error);
+                        return;
+                    }
+                    
+                    // Clear localStorage
+                    localStorage.removeItem('resumeId');
+                    
+                    // Show success message
+                    formContainer.style.display = 'none';
+                    successContainer.style.display = 'block';
+                    
+                    // Scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error:', error);
+                    showError('Error submitting application. Please try again later.');
+                });
+            }
+            
+            // Show loading overlay
+            function showLoading(message) {
+                loadingText.textContent = message || 'Loading...';
+                loadingOverlay.style.display = 'flex';
+            }
+            
+            // Hide loading overlay
+            function hideLoading() {
+                loadingOverlay.style.display = 'none';
+            }
+            
+            // Show error message
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                
+                // Scroll to error message
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            // Hide error message
+            function hideError() {
+                errorMessage.style.display = 'none';
+            }
+            
+            // Show success message
+            function showSuccess(message) {
+                // Show toast or notification
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = `
+                    <div class="toast-content">
+                        <i class="fas fa-check-circle"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // Show toast
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 100);
+                
+                // Hide toast after 3 seconds
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 300);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Resume Parser</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #6e57e0, #8a49ff);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        nav ul li a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+        }
+        
+        /* Main Content Styles */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            color: #6e57e0;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Upload Area Styles */
+        .upload-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .upload-area {
+            border: 2px dashed #6e57e0;
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .upload-area:hover {
+            background-color: rgba(110, 87, 224, 0.05);
+        }
+        
+        .upload-area i {
+            font-size: 3rem;
+            color: #6e57e0;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-area p {
+            margin-bottom: 1rem;
+            color: #666;
+        }
+        
+        .browse-btn {
+            background-color: #6e57e0;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .browse-btn:hover {
+            background-color: #5a46c7;
+        }
+        
+        .file-info {
+            margin-top: 1.5rem;
+            display: none;
+        }
+        
+        .file-preview {
+            display: flex;
+            align-items: center;
+            background-color: rgba(110, 87, 224, 0.1);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .file-icon {
+            font-size: 2rem;
+            color: #6e57e0;
+            margin-right: 1rem;
+        }
+        
+        .file-details {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+        
+        .file-size {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .upload-btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .upload-btn:hover {
+            background-color: #43a047;
+        }
+        
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #6e57e0;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        
+        .feature-icon i {
+            font-size: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 0.8rem;
+            color: #333;
+        }
+        
+        .feature-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        /* Results Section */
+        .results-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+        
+        .results-section h2 {
+            text-align: center;
+            color: #6e57e0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .resume-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .resume-card h4 {
+            color: #6e57e0;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .resume-section {
+            margin-bottom: 1rem;
+        }
+        
+        .resume-section h5 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #444;
+        }
+        
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .skill-tag {
+            background-color: rgba(110, 87, 224, 0.1);
+            color: #6e57e0;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .action-btn {
+            background-color: #6e57e0;
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        
+        .action-btn i {
+            margin-right: 0.5rem;
+        }
+        
+        .action-btn:hover {
+            background-color: #5a46c7;
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #6e57e0;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .loading-overlay p {
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        /* Error message */
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        /* Social links styling */
+        .social-link {
+            color: #6e57e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .social-link:hover {
+            color: #5a46c7;
+            text-decoration: underline;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+            }
+            
+            nav ul li {
+                margin-left: 0.5rem;
+                margin-right: 0.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-file-alt"></i>
+            <span>Smart Resume Parser</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/dashboard"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+                <li><a href="/form"><i class="fas fa-wpforms"></i> Application Form</a></li>
+                <li><a href="/skill_gap"><i class="fas fa-chart-line"></i> Skill Gap</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Smart Resume Parser & Career Recommendation</h1>
+            <p>Upload your resume and let AI extract the information for you. Our system will parse your CV, analyze your skills, and provide career recommendations to help you advance your professional journey.</p>
+        </div>
+
+        <div class="upload-container">
+            <div id="error-message" class="error-message"></div>
+            <div class="upload-area" id="drop-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drag & Drop your resume or click to browse</p>
+                <input type="file" id="file-upload" accept=".pdf,.docx,.doc,.txt,.rtf,.csv" hidden>
+                <button class="browse-btn">Browse Files</button>
+            </div>
+            <div class="file-info" id="file-info">
+                <div class="file-preview">
+                    <i class="fas fa-file-pdf file-icon" id="file-icon"></i>
+                    <div class="file-details">
+                        <p class="file-name" id="selected-file-name">filename.pdf</p>
+                        <p class="file-size" id="selected-file-size">0 KB</p>
+                    </div>
+                </div>
+                <button class="upload-btn" id="upload-btn">
+                    <i class="fas fa-upload"></i> Upload & Parse
+                </button>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI-Powered Parsing</h3>
+                <p>Extract information from resumes using advanced AI technology that understands the structure and content of your CV.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Skill Gap Analysis</h3>
+                <p>Identify missing skills for your target roles and get recommendations for courses to help you upskill.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-magic"></i>
+                </div>
+                <h3>Auto-Fill Forms</h3>
+                <p>Automatically populate application forms with extracted data, saving time and reducing errors in the application process.</p>
+            </div>
+        </div>
+
+        <div class="results-section" id="results-section">
+            <h2>Parsed Resume</h2>
+            <div class="resume-card" id="resume-details">
+                <!-- Resume details will be displayed here -->
+            </div>
+            <div class="action-buttons">
+                <a href="/form" class="action-btn" id="auto-fill-btn">
+                    <i class="fas fa-wpforms"></i> Auto-Fill Application Form
+                </a>
+                <a href="/skill_gap" class="action-btn" id="skill-gap-btn">
+                    <i class="fas fa-chart-line"></i> Analyze Skill Gap
+                </a>
+                <a href="/dashboard" class="action-btn">
+                    <i class="fas fa-chart-bar"></i> View Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Parsing resume with AI...</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Smart Resume Parser & Career Recommendation. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const dropArea = document.getElementById('drop-area');
+            const fileUpload = document.getElementById('file-upload');
+            const browseBtn = document.querySelector('.browse-btn');
+            const fileInfo = document.getElementById('file-info');
+            const fileIcon = document.getElementById('file-icon');
+            const selectedFileName = document.getElementById('selected-file-name');
+            const selectedFileSize = document.getElementById('selected-file-size');
+            const uploadBtn = document.getElementById('upload-btn');
+            const resultsSection = document.getElementById('results-section');
+            const resumeDetails = document.getElementById('resume-details');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const autoFillBtn = document.getElementById('auto-fill-btn');
+            const skillGapBtn = document.getElementById('skill-gap-btn');
+            const errorMessage = document.getElementById('error-message');
+            
+            // File selection via browse button
+            browseBtn.addEventListener('click', () => {
+                fileUpload.click();
+            });
+            
+            // File selection event
+            fileUpload.addEventListener('change', handleFileSelect);
+            
+            // Drag and drop events
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.classList.add('highlight');
+                dropArea.style.backgroundColor = 'rgba(110, 87, 224, 0.05)';
+            }
+            
+            function unhighlight() {
+                dropArea.classList.remove('highlight');
+                dropArea.style.backgroundColor = '';
+            }
+            
+            // Handle dropped files
+            dropArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length) {
+                    fileUpload.files = files;
+                    handleFileSelect();
+                }
+            }
+            
+            // Handle file selection
+            function handleFileSelect() {
+                if (fileUpload.files.length) {
+                    const file = fileUpload.files[0];
+                    
+                    // Check if file is allowed
+                    const fileExt = file.name.split('.').pop().toLowerCase();
+                    if (!['pdf', 'docx', 'doc', 'txt', 'rtf', 'csv'].includes(fileExt)) {
+                        showError('Please select a supported file type (PDF, DOCX, DOC, TXT, RTF, CSV).');
+                        return;
+                    }
+                    
+                    const fileSize = formatFileSize(file.size);
+                    
+                    // Update file icon based on file type
+                    fileIcon.className = 'file-icon';
+                    if (fileExt === 'pdf') {
+                        fileIcon.className = 'fas fa-file-pdf file-icon';
+                    } else if (['docx', 'doc'].includes(fileExt)) {
+                        fileIcon.className = 'fas fa-file-word file-icon';
+                    } else if (['txt', 'rtf'].includes(fileExt)) {
+                        fileIcon.className = 'fas fa-file-alt file-icon';
+                    } else if (fileExt === 'csv') {
+                        fileIcon.className = 'fas fa-file-csv file-icon';
+                    }
+                    
+                    // Update UI
+                    selectedFileName.textContent = file.name;
+                    selectedFileSize.textContent = fileSize;
+                    
+                    // Show file info
+                    dropArea.style.display = 'none';
+                    fileInfo.style.display = 'block';
+                    errorMessage.style.display = 'none';
+                }
+            }
+            
+            // Format file size
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' bytes';
+                else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                else return (bytes / 1048576).toFixed(1) + ' MB';
+            }
+            
+            // Show error message
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+            
+            // Upload and parse resume
+            uploadBtn.addEventListener('click', uploadResume);
+            
+            function uploadResume() {
+                if (!fileUpload.files.length) {
+                    showError('Please select a file first.');
+                    return;
+                }
+                
+                const file = fileUpload.files[0];
+                const formData = new FormData();
+                formData.append('resume', file);
+                
+                // Show loading overlay
+                loadingOverlay.style.display = 'flex';
+                errorMessage.style.display = 'none';
+                
+                // Send request to server
+                fetch('/upload_resume', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Hide loading overlay
+                    loadingOverlay.style.display = 'none';
+                    
+                    if (data.error) {
+                        showError(data.error);
+                        return;
+                    }
+                    
+                    // Store resume ID in localStorage for auto-fill
+                    localStorage.setItem('resumeId', data.resume_data._id);
+                    
+                    // Update links with resume ID
+                    autoFillBtn.href = `/form?resume=${data.resume_data._id}`;
+                    skillGapBtn.href = `/skill_gap?resume=${data.resume_data._id}`;
+                    
+                    // Display resume details
+                    displayResumeDetails(data.resume_data);
+                    
+                    // Show results section
+                    resultsSection.style.display = 'block';
+                    
+                    // Scroll to results
+                    resultsSection.scrollIntoView({ behavior: 'smooth' });
+                })
+                .catch(error => {
+                    loadingOverlay.style.display = 'none';
+                    console.error('Error:', error);
+                    showError('An error occurred while processing your resume. Please try again.');
+                });
+            }
+            
+            // Display resume details
+            function displayResumeDetails(resume) {
+                // Format education
+                const educationHTML = resume.Education && resume.Education.length > 0 ? 
+                    resume.Education.map(edu => 
+                        `<div>${edu.Degree || 'Not specified'} from ${edu.Institution || 'Not specified'} (${edu.Years || 'Not specified'})</div>`
+                    ).join('') : '<p>No education information found</p>';
+                
+                // Format work experience
+                const experienceHTML = resume["Work Experience"] && resume["Work Experience"].length > 0 ? 
+                    resume["Work Experience"].map(exp => 
+                        `<div>${exp.Role || 'Not specified'} at ${exp.Company || 'Not specified'} (${exp.Years || 'Not specified'})</div>`
+                    ).join('') : '<p>No work experience found</p>';
+                
+                // Format technical skills
+                const technicalSkills = resume.Skills.Technical.map(skill => 
+                    `<span class="skill-tag">${skill}</span>`
+                ).join(' ');
+                
+                // Format soft skills
+                const softSkills = resume.Skills.Soft ? resume.Skills.Soft.map(skill => 
+                    `<span class="skill-tag">${skill}</span>`
+                ).join(' ') : '';
+                
+                // Format social profiles with icons
+                const linkedInHTML = resume["LinkedIn"] ? 
+                    `<p><strong><i class="fab fa-linkedin"></i> LinkedIn:</strong> <a href="${resume["LinkedIn"]}" target="_blank" class="social-link">${resume["LinkedIn"]}</a></p>` : '';
+                
+                const githubHTML = resume["GitHub"] ? 
+                    `<p><strong><i class="fab fa-github"></i> GitHub:</strong> <a href="${resume["GitHub"]}" target="_blank" class="social-link">${resume["GitHub"]}</a></p>` : '';
+                
+                // Build HTML
+                resumeDetails.innerHTML = `
+                    <h4>${resume["Full Name"] || 'Not specified'}</h4>
+                    <p><strong>Contact:</strong> ${resume["Contact Number"] || 'Not provided'}</p>
+                    <p><strong>Email:</strong> ${resume["Email Address"] || 'Not provided'}</p>
+                    <p><strong>Location:</strong> ${resume["Location"] || 'Not provided'}</p>
+                    ${linkedInHTML}
+                    ${githubHTML}
+                    
+                    <div class="resume-section">
+                        <h5>Education</h5>
+                        ${educationHTML}
+                    </div>
+                    
+                    <div class="resume-section">
+                        <h5>Work Experience</h5>
+                        ${experienceHTML}
+                    </div>
+                    
+                    <div class="resume-section">
+                        <h5>Technical Skills</h5>
+                        <div class="skills-container">
+                            ${technicalSkills || '<p>No technical skills found</p>'}
+                        </div>
+                    </div>
+                    
+                    <div class="resume-section">
+                        <h5>Soft Skills</h5>
+                        <div class="skills-container">
+                            ${softSkills || '<p>No soft skills found</p>'}
+                        </div>
+                    </div>
+                    
+                    <div class="resume-section">
+                        <h5>Recommended Roles</h5>
+                        <p>${resume["Recommended Roles"] ? resume["Recommended Roles"].join(', ') : 'No recommended roles found'}</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
