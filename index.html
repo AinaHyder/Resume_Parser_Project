@@ -106,6 +106,37 @@
             margin-bottom: 2rem;
         }
         
+        .upload-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .upload-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .upload-tab.active {
+            border-bottom: 2px solid #6e57e0;
+            color: #6e57e0;
+        }
+        
+        .upload-tab:hover {
+            background-color: rgba(110, 87, 224, 0.05);
+        }
+        
+        .upload-content {
+            display: none;
+        }
+        
+        .upload-content.active {
+            display: block;
+        }
+        
         .upload-area {
             border: 2px dashed #6e57e0;
             border-radius: 8px;
@@ -258,11 +289,24 @@
             margin-bottom: 1.5rem;
         }
         
+        .resume-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
         .resume-card {
             border: 1px solid #eee;
             border-radius: 8px;
             padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            background-color: #fafafa;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .resume-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
         
         .resume-card h4 {
@@ -271,55 +315,105 @@
             font-size: 1.3rem;
         }
         
-        .resume-section {
+        .resume-info {
             margin-bottom: 1rem;
         }
         
-        .resume-section h5 {
-            font-size: 1.1rem;
+        .resume-info p {
             margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .resume-info strong {
             color: #444;
+        }
+        
+        .skills-preview {
+            margin-bottom: 1rem;
         }
         
         .skills-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 0.3rem;
             margin-top: 0.5rem;
         }
         
         .skill-tag {
             background-color: rgba(110, 87, 224, 0.1);
             color: #6e57e0;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
         }
         
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        
-        .action-btn {
+        .view-details-btn {
             background-color: #6e57e0;
             color: white;
-            text-decoration: none;
-            padding: 0.8rem 1.5rem;
+            border: none;
+            padding: 0.6rem 1.2rem;
             border-radius: 4px;
-            display: inline-flex;
-            align-items: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            width: 100%;
             transition: background-color 0.3s;
         }
         
-        .action-btn i {
-            margin-right: 0.5rem;
+        .view-details-btn:hover {
+            background-color: #5a46c7;
         }
         
-        .action-btn:hover {
-            background-color: #5a46c7;
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+        }
+        
+        .modal h3 {
+            color: #6e57e0;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-section h5 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #444;
         }
         
         /* Loading Overlay */
@@ -369,6 +463,26 @@
             display: none;
         }
         
+        /* Success message */
+        .success-message {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        /* Duplicate message */
+        .duplicate-message {
+            background-color: #fff8e1;
+            color: #ff8f00;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
         /* Social links styling */
         .social-link {
             color: #6e57e0;
@@ -410,14 +524,14 @@
                 font-size: 2rem;
             }
             
-            .action-buttons {
-                flex-direction: column;
+            .resume-cards-container {
+                grid-template-columns: 1fr;
             }
             
-            .action-btn {
-                width: 100%;
-                justify-content: center;
-                margin-bottom: 0.5rem;
+            .modal-content {
+                width: 95%;
+                margin: 2% auto;
+                padding: 1rem;
             }
         }
     </style>
@@ -434,7 +548,6 @@
                 <li><a href="/" class="active"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="/dashboard"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
                 <li><a href="/form"><i class="fas fa-wpforms"></i> Application Form</a></li>
-                <li><a href="/skill_gap"><i class="fas fa-chart-line"></i> Skill Gap</a></li>
             </ul>
         </nav>
     </header>
@@ -442,27 +555,41 @@
     <div class="container">
         <div class="hero">
             <h1>Smart Resume Parser & Career Recommendation</h1>
-            <p>Upload your resume and let AI extract the information for you. Our system will parse your CV, analyze your skills, and provide career recommendations to help you advance your professional journey.</p>
+            <p>Upload multiple resumes or a whole folder and let AI extract the information for you. Our system will parse each CV, analyze skills, and provide career recommendations to help advance professional journeys.</p>
         </div>
 
         <div class="upload-container">
             <div id="error-message" class="error-message"></div>
-            <div class="upload-area" id="drop-area">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Drag & Drop your resume or click to browse</p>
-                <input type="file" id="file-upload" accept=".pdf,.docx,.doc,.txt,.rtf,.csv" hidden>
-                <button class="browse-btn">Browse Files</button>
+            <div id="success-message" class="success-message"></div>
+            <div id="duplicate-message" class="duplicate-message"></div>
+            
+            <div class="upload-tabs">
+                <div class="upload-tab active" data-tab="files">Upload Files</div>
+                <div class="upload-tab" data-tab="folder">Upload Folder</div>
             </div>
-            <div class="file-info" id="file-info">
-                <div class="file-preview">
-                    <i class="fas fa-file-pdf file-icon" id="file-icon"></i>
-                    <div class="file-details">
-                        <p class="file-name" id="selected-file-name">filename.pdf</p>
-                        <p class="file-size" id="selected-file-size">0 KB</p>
-                    </div>
+            
+            <div class="upload-content active" id="files-content">
+                <div class="upload-area" id="file-drop-area">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & Drop multiple resumes or click to browse</p>
+                    <input type="file" id="file-upload" accept=".pdf,.docx,.doc,.txt,.rtf,.csv" multiple hidden>
+                    <button class="browse-btn" id="file-browse-btn">Browse Files</button>
                 </div>
+            </div>
+            
+            <div class="upload-content" id="folder-content">
+                <div class="upload-area" id="folder-drop-area">
+                    <i class="fas fa-folder-open"></i>
+                    <p>Select a folder containing multiple resumes</p>
+                    <input type="file" id="folder-upload" webkitdirectory directory multiple hidden>
+                    <button class="browse-btn" id="folder-browse-btn">Browse Folder</button>
+                </div>
+            </div>
+            
+            <div class="file-info" id="file-info">
+                <div id="selected-files-list"></div>
                 <button class="upload-btn" id="upload-btn">
-                    <i class="fas fa-upload"></i> Upload & Parse
+                    <i class="fas fa-upload"></i> Upload & Parse All Resumes
                 </button>
             </div>
         </div>
@@ -473,46 +600,45 @@
                     <i class="fas fa-robot"></i>
                 </div>
                 <h3>AI-Powered Parsing</h3>
-                <p>Extract information from resumes using advanced AI technology that understands the structure and content of your CV.</p>
+                <p>Extract information from multiple resumes using advanced AI technology that understands the structure and content of CVs.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="fas fa-folder-open"></i>
                 </div>
-                <h3>Skill Gap Analysis</h3>
-                <p>Identify missing skills for your target roles and get recommendations for courses to help you upskill.</p>
+                <h3>Bulk Processing</h3>
+                <p>Upload entire folders containing multiple CVs and process them all at once with individual unique IDs in the database.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">
-                    <i class="fas fa-magic"></i>
+                    <i class="fas fa-clone"></i>
                 </div>
-                <h3>Auto-Fill Forms</h3>
-                <p>Automatically populate application forms with extracted data, saving time and reducing errors in the application process.</p>
+                <h3>Duplicate Detection</h3>
+                <p>Automatically detect and handle duplicate resumes by checking name, email, and phone number to keep your database clean.</p>
             </div>
         </div>
 
         <div class="results-section" id="results-section">
-            <h2>Parsed Resume</h2>
-            <div class="resume-card" id="resume-details">
-                <!-- Resume details will be displayed here -->
+            <h2>Processed Resumes</h2>
+            <div class="resume-cards-container" id="resume-cards-container">
+                <!-- Resume cards will be displayed here -->
             </div>
-            <div class="action-buttons">
-                <a href="/form" class="action-btn" id="auto-fill-btn">
-                    <i class="fas fa-wpforms"></i> Auto-Fill Application Form
-                </a>
-                <a href="/skill_gap" class="action-btn" id="skill-gap-btn">
-                    <i class="fas fa-chart-line"></i> Analyze Skill Gap
-                </a>
-                <a href="/dashboard" class="action-btn">
-                    <i class="fas fa-chart-bar"></i> View Dashboard
-                </a>
+        </div>
+    </div>
+
+    <!-- Modal for detailed view -->
+    <div id="resume-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-resume-details">
+                <!-- Detailed resume info will be displayed here -->
             </div>
         </div>
     </div>
 
     <div class="loading-overlay" id="loading-overlay">
         <div class="spinner"></div>
-        <p>Parsing resume with AI...</p>
+        <p>Processing resumes with AI...</p>
     </div>
 
     <footer>
@@ -522,32 +648,63 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // DOM Elements
-            const dropArea = document.getElementById('drop-area');
+            const uploadTabs = document.querySelectorAll('.upload-tab');
+            const uploadContents = document.querySelectorAll('.upload-content');
+            const fileDropArea = document.getElementById('file-drop-area');
+            const folderDropArea = document.getElementById('folder-drop-area');
             const fileUpload = document.getElementById('file-upload');
-            const browseBtn = document.querySelector('.browse-btn');
+            const folderUpload = document.getElementById('folder-upload');
+            const fileBrowseBtn = document.getElementById('file-browse-btn');
+            const folderBrowseBtn = document.getElementById('folder-browse-btn');
             const fileInfo = document.getElementById('file-info');
-            const fileIcon = document.getElementById('file-icon');
-            const selectedFileName = document.getElementById('selected-file-name');
-            const selectedFileSize = document.getElementById('selected-file-size');
+            const selectedFilesList = document.getElementById('selected-files-list');
             const uploadBtn = document.getElementById('upload-btn');
             const resultsSection = document.getElementById('results-section');
-            const resumeDetails = document.getElementById('resume-details');
+            const resumeCardsContainer = document.getElementById('resume-cards-container');
             const loadingOverlay = document.getElementById('loading-overlay');
-            const autoFillBtn = document.getElementById('auto-fill-btn');
-            const skillGapBtn = document.getElementById('skill-gap-btn');
             const errorMessage = document.getElementById('error-message');
+            const successMessage = document.getElementById('success-message');
+            const duplicateMessage = document.getElementById('duplicate-message');
+            const modal = document.getElementById('resume-modal');
+            const modalContent = document.getElementById('modal-resume-details');
+            const closeModal = document.querySelector('.close');
             
-            // File selection via browse button
-            browseBtn.addEventListener('click', () => {
+            let selectedFiles = [];
+            
+            // Tab switching
+            uploadTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and contents
+                    uploadTabs.forEach(t => t.classList.remove('active'));
+                    uploadContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add('active');
+                    const tabId = tab.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-content`).classList.add('active');
+                    
+                    // Reset file selection when switching tabs
+                    resetFileSelection();
+                });
+            });
+            
+            // File selection via browse buttons
+            fileBrowseBtn.addEventListener('click', () => {
                 fileUpload.click();
             });
             
-            // File selection event
-            fileUpload.addEventListener('change', handleFileSelect);
+            folderBrowseBtn.addEventListener('click', () => {
+                folderUpload.click();
+            });
             
-            // Drag and drop events
+            // File selection events
+            fileUpload.addEventListener('change', () => handleFileSelect(fileUpload.files));
+            folderUpload.addEventListener('change', () => handleFileSelect(folderUpload.files));
+            
+            // Drag and drop events for files
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                dropArea.addEventListener(eventName, preventDefaults, false);
+                fileDropArea.addEventListener(eventName, preventDefaults, false);
+                folderDropArea.addEventListener(eventName, preventDefaults, false);
             });
             
             function preventDefaults(e) {
@@ -556,71 +713,105 @@
             }
             
             ['dragenter', 'dragover'].forEach(eventName => {
-                dropArea.addEventListener(eventName, highlight, false);
+                fileDropArea.addEventListener(eventName, () => highlight(fileDropArea), false);
+                folderDropArea.addEventListener(eventName, () => highlight(folderDropArea), false);
             });
             
             ['dragleave', 'drop'].forEach(eventName => {
-                dropArea.addEventListener(eventName, unhighlight, false);
+                fileDropArea.addEventListener(eventName, () => unhighlight(fileDropArea), false);
+                folderDropArea.addEventListener(eventName, () => unhighlight(folderDropArea), false);
             });
             
-            function highlight() {
-                dropArea.classList.add('highlight');
-                dropArea.style.backgroundColor = 'rgba(110, 87, 224, 0.05)';
+            function highlight(element) {
+                element.classList.add('highlight');
+                element.style.backgroundColor = 'rgba(110, 87, 224, 0.05)';
             }
             
-            function unhighlight() {
-                dropArea.classList.remove('highlight');
-                dropArea.style.backgroundColor = '';
+            function unhighlight(element) {
+                element.classList.remove('highlight');
+                element.style.backgroundColor = '';
             }
             
             // Handle dropped files
-            dropArea.addEventListener('drop', handleDrop, false);
+            fileDropArea.addEventListener('drop', handleDrop, false);
             
             function handleDrop(e) {
                 const dt = e.dataTransfer;
                 const files = dt.files;
                 
                 if (files.length) {
-                    fileUpload.files = files;
-                    handleFileSelect();
+                    handleFileSelect(files);
                 }
             }
             
             // Handle file selection
-            function handleFileSelect() {
-                if (fileUpload.files.length) {
-                    const file = fileUpload.files[0];
-                    
-                    // Check if file is allowed
-                    const fileExt = file.name.split('.').pop().toLowerCase();
-                    if (!['pdf', 'docx', 'doc', 'txt', 'rtf', 'csv'].includes(fileExt)) {
-                        showError('Please select a supported file type (PDF, DOCX, DOC, TXT, RTF, CSV).');
-                        return;
-                    }
-                    
-                    const fileSize = formatFileSize(file.size);
-                    
-                    // Update file icon based on file type
-                    fileIcon.className = 'file-icon';
-                    if (fileExt === 'pdf') {
-                        fileIcon.className = 'fas fa-file-pdf file-icon';
-                    } else if (['docx', 'doc'].includes(fileExt)) {
-                        fileIcon.className = 'fas fa-file-word file-icon';
-                    } else if (['txt', 'rtf'].includes(fileExt)) {
-                        fileIcon.className = 'fas fa-file-alt file-icon';
-                    } else if (fileExt === 'csv') {
-                        fileIcon.className = 'fas fa-file-csv file-icon';
-                    }
-                    
-                    // Update UI
-                    selectedFileName.textContent = file.name;
-                    selectedFileSize.textContent = fileSize;
-                    
-                    // Show file info
-                    dropArea.style.display = 'none';
-                    fileInfo.style.display = 'block';
-                    errorMessage.style.display = 'none';
+            function handleFileSelect(files) {
+                selectedFiles = Array.from(files);
+                
+                if (selectedFiles.length === 0) {
+                    return;
                 }
+                
+                // Filter allowed files
+                const allowedFiles = selectedFiles.filter(file => {
+                    const fileExt = file.name.split('.').pop().toLowerCase();
+                    return ['pdf', 'docx', 'doc', 'txt', 'rtf', 'csv'].includes(fileExt);
+                });
+                
+                if (allowedFiles.length === 0) {
+                    showError('Please select supported file types (PDF, DOCX, DOC, TXT, RTF, CSV).');
+                    return;
+                }
+                
+                if (allowedFiles.length !== selectedFiles.length) {
+                    showError(`${selectedFiles.length - allowedFiles.length} files were skipped due to unsupported format.`);
+                }
+                
+                selectedFiles = allowedFiles;
+                displaySelectedFiles();
+                
+                // Show file info
+                fileDropArea.style.display = 'none';
+                folderDropArea.style.display = 'none';
+                fileInfo.style.display = 'block';
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+                duplicateMessage.style.display = 'none';
+            }
+            
+            // Display selected files
+            function displaySelectedFiles() {
+                selectedFilesList.innerHTML = '';
+                
+                selectedFiles.forEach((file, index) => {
+                    const fileExt = file.name.split('.').pop().toLowerCase();
+                    let iconClass = 'fas fa-file';
+                    
+                    if (fileExt === 'pdf') {
+                        iconClass = 'fas fa-file-pdf';
+                    } else if (['docx', 'doc'].includes(fileExt)) {
+                        iconClass = 'fas fa-file-word';
+                    } else if (['txt', 'rtf'].includes(fileExt)) {
+                        iconClass = 'fas fa-file-alt';
+                    } else if (fileExt === 'csv') {
+                        iconClass = 'fas fa-file-csv';
+                    }
+                    
+                    const filePreview = document.createElement('div');
+                    filePreview.className = 'file-preview';
+                    filePreview.innerHTML = `
+                        <i class="${iconClass} file-icon"></i>
+                        <div class="file-details">
+                            <p class="file-name">${file.name}</p>
+                            <p class="file-size">${formatFileSize(file.size)}</p>
+                        </div>
+                    `;
+                    
+                    selectedFilesList.appendChild(filePreview);
+                });
+                
+                // Update upload button text
+                uploadBtn.innerHTML = `<i class="fas fa-upload"></i> Upload & Parse ${selectedFiles.length} Resume${selectedFiles.length > 1 ? 's' : ''}`;
             }
             
             // Format file size
@@ -630,31 +821,64 @@
                 else return (bytes / 1048576).toFixed(1) + ' MB';
             }
             
+            // Reset file selection
+            function resetFileSelection() {
+                selectedFiles = [];
+                fileUpload.value = '';
+                folderUpload.value = '';
+                fileDropArea.style.display = 'block';
+                folderDropArea.style.display = 'block';
+                fileInfo.style.display = 'none';
+                selectedFilesList.innerHTML = '';
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+                duplicateMessage.style.display = 'none';
+            }
+            
             // Show error message
             function showError(message) {
                 errorMessage.textContent = message;
                 errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+                duplicateMessage.style.display = 'none';
             }
             
-            // Upload and parse resume
-            uploadBtn.addEventListener('click', uploadResume);
+            // Show success message
+            function showSuccess(message) {
+                successMessage.textContent = message;
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+                duplicateMessage.style.display = 'none';
+            }
             
-            function uploadResume() {
-                if (!fileUpload.files.length) {
-                    showError('Please select a file first.');
+            // Show duplicate message
+            function showDuplicate(message) {
+                duplicateMessage.textContent = message;
+                duplicateMessage.style.display = 'block';
+            }
+            
+            // Upload and parse resumes
+            uploadBtn.addEventListener('click', uploadResumes);
+            
+            function uploadResumes() {
+                if (selectedFiles.length === 0) {
+                    showError('Please select files first.');
                     return;
                 }
                 
-                const file = fileUpload.files[0];
                 const formData = new FormData();
-                formData.append('resume', file);
+                selectedFiles.forEach(file => {
+                    formData.append('resumes', file);
+                });
                 
                 // Show loading overlay
                 loadingOverlay.style.display = 'flex';
                 errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+                duplicateMessage.style.display = 'none';
                 
                 // Send request to server
-                fetch('/upload_resume', {
+                fetch('/upload_resumes', {
                     method: 'POST',
                     body: formData
                 })
@@ -673,52 +897,148 @@
                         return;
                     }
                     
-                    // Store resume ID in localStorage for auto-fill
-                    localStorage.setItem('resumeId', data.resume_data._id);
+                    // Show success message
+                    let message = `Successfully processed ${data.processed_count} resume${data.processed_count > 1 ? 's' : ''}`;
+                    if (data.failed_count > 0) {
+                        message += `. ${data.failed_count} file${data.failed_count > 1 ? 's' : ''} failed to process.`;
+                    }
+                    showSuccess(message);
                     
-                    // Update links with resume ID
-                    autoFillBtn.href = `/form?resume=${data.resume_data._id}`;
-                    skillGapBtn.href = `/skill_gap?resume=${data.resume_data._id}`;
+                    // Show duplicate message if any
+                    if (data.duplicate_count > 0) {
+                        let dupMessage = `${data.duplicate_count} duplicate${data.duplicate_count > 1 ? 's' : ''} found and removed from database.`;
+                        showDuplicate(dupMessage);
+                    }
                     
-                    // Display resume details
-                    displayResumeDetails(data.resume_data);
+                    // Display resume cards
+                    displayResumeCards(data.processed_resumes);
                     
                     // Show results section
                     resultsSection.style.display = 'block';
                     
                     // Scroll to results
                     resultsSection.scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Reset form
+                    resetFileSelection();
                 })
                 .catch(error => {
                     loadingOverlay.style.display = 'none';
                     console.error('Error:', error);
-                    showError('An error occurred while processing your resume. Please try again.');
+                    showError('An error occurred while processing your resumes. Please try again.');
                 });
             }
             
-            // Display resume details
-            function displayResumeDetails(resume) {
+            // Display resume cards
+            function displayResumeCards(resumes) {
+                resumeCardsContainer.innerHTML = '';
+                
+                resumes.forEach(resume => {
+                    const card = createResumeCard(resume);
+                    resumeCardsContainer.appendChild(card);
+                });
+            }
+            
+            // Create resume card
+            function createResumeCard(resume) {
+                const card = document.createElement('div');
+                card.className = 'resume-card';
+                
+                // Get first few technical skills for preview
+                const technicalSkills = resume.Skills?.Technical || [];
+                const skillsPreview = technicalSkills.slice(0, 3).map(skill => 
+                    `<span class="skill-tag">${skill}</span>`
+                ).join(' ');
+                
+                const moreSkillsText = technicalSkills.length > 3 ? 
+                    `<span class="skill-tag">+${technicalSkills.length - 3} more</span>` : '';
+                
+                // Clean up name - remove "Contact" prefix if present
+                let name = resume["Full Name"] || 'Name not found';
+                if (name.startsWith("Contact ")) {
+                    name = name.substring(8);
+                }
+                
+                card.innerHTML = `
+                    <h4>${name}</h4>
+                    <div class="resume-info">
+                        <p><strong>Email:</strong> ${resume["Email Address"] || 'Not provided'}</p>
+                        <p><strong>Phone:</strong> ${resume["Contact Number"] || 'Not provided'}</p>
+                        <p><strong>Location:</strong> ${resume["Location"] || 'Not provided'}</p>
+                        <p><strong>File:</strong> ${resume.filename || 'Unknown'}</p>
+                    </div>
+                    <div class="skills-preview">
+                        <strong>Skills Preview:</strong>
+                        <div class="skills-container">
+                            ${skillsPreview}
+                            ${moreSkillsText}
+                        </div>
+                    </div>
+                    <button class="view-details-btn" onclick="viewResumeDetails('${resume._id}')">
+                        <i class="fas fa-eye"></i> View Details
+                    </button>
+                `;
+                
+                return card;
+            }
+            
+            // View resume details in modal
+            window.viewResumeDetails = function(resumeId) {
+                fetch(`/get_resume/${resumeId}`)
+                .then(response => response.json())
+                .then(resume => {
+                    if (resume.error) {
+                        showError('Failed to load resume details.');
+                        return;
+                    }
+                    
+                    displayResumeDetailsModal(resume);
+                    modal.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError('Failed to load resume details.');
+                });
+            };
+            
+            // Display resume details in modal
+            function displayResumeDetailsModal(resume) {
+                // Clean up name - remove "Contact" prefix if present
+                let name = resume["Full Name"] || 'Name not found';
+                if (name.startsWith("Contact ")) {
+                    name = name.substring(8);
+                }
+                
                 // Format education
                 const educationHTML = resume.Education && resume.Education.length > 0 ? 
                     resume.Education.map(edu => 
-                        `<div>${edu.Degree || 'Not specified'} from ${edu.Institution || 'Not specified'} (${edu.Years || 'Not specified'})</div>`
+                        `<div style="margin-bottom: 0.5rem;">
+                            <strong>${edu.Degree || 'Degree not specified'}</strong><br>
+                            ${edu.Institution || 'Institution not specified'}<br>
+                            <em>${edu.Years || 'Years not specified'}</em>
+                        </div>`
                     ).join('') : '<p>No education information found</p>';
                 
                 // Format work experience
                 const experienceHTML = resume["Work Experience"] && resume["Work Experience"].length > 0 ? 
                     resume["Work Experience"].map(exp => 
-                        `<div>${exp.Role || 'Not specified'} at ${exp.Company || 'Not specified'} (${exp.Years || 'Not specified'})</div>`
+                        `<div style="margin-bottom: 1rem;">
+                            <strong>${exp.Role || 'Role not specified'}</strong><br>
+                            ${exp.Company || 'Company not specified'}<br>
+                            <em>${exp.Years || 'Years not specified'}</em>
+                            ${exp.Description ? `<p style="margin-top: 0.5rem; font-size: 0.9rem;">${exp.Description}</p>` : ''}
+                        </div>`
                     ).join('') : '<p>No work experience found</p>';
                 
                 // Format technical skills
-                const technicalSkills = resume.Skills.Technical.map(skill => 
+                const technicalSkills = resume.Skills?.Technical?.map(skill => 
                     `<span class="skill-tag">${skill}</span>`
-                ).join(' ');
+                ).join(' ') || '<p>No technical skills found</p>';
                 
                 // Format soft skills
-                const softSkills = resume.Skills.Soft ? resume.Skills.Soft.map(skill => 
+                const softSkills = resume.Skills?.Soft?.map(skill => 
                     `<span class="skill-tag">${skill}</span>`
-                ).join(' ') : '';
+                ).join(' ') || '<p>No soft skills found</p>';
                 
                 // Format social profiles with icons
                 const linkedInHTML = resume["LinkedIn"] ? 
@@ -727,45 +1047,76 @@
                 const githubHTML = resume["GitHub"] ? 
                     `<p><strong><i class="fab fa-github"></i> GitHub:</strong> <a href="${resume["GitHub"]}" target="_blank" class="social-link">${resume["GitHub"]}</a></p>` : '';
                 
+                // Format projects
+                const projectsHTML = resume.Projects && resume.Projects.length > 0 ?
+                    resume.Projects.map(project =>
+                        `<div style="margin-bottom: 1rem;">
+                            <strong>${project.Name || 'Project name not specified'}</strong><br>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;">${project.Description || 'No description available'}</p>
+                        </div>`
+                    ).join('') : '<p>No projects found</p>';
+                
                 // Build HTML
-                resumeDetails.innerHTML = `
-                    <h4>${resume["Full Name"] || 'Not specified'}</h4>
-                    <p><strong>Contact:</strong> ${resume["Contact Number"] || 'Not provided'}</p>
-                    <p><strong>Email:</strong> ${resume["Email Address"] || 'Not provided'}</p>
-                    <p><strong>Location:</strong> ${resume["Location"] || 'Not provided'}</p>
-                    ${linkedInHTML}
-                    ${githubHTML}
+                modalContent.innerHTML = `
+                    <h3>${name}</h3>
                     
-                    <div class="resume-section">
+                    <div class="modal-section">
+                        <h5>Contact Information</h5>
+                        <p><strong>Email:</strong> ${resume["Email Address"] || 'Not provided'}</p>
+                        <p><strong>Phone:</strong> ${resume["Contact Number"] || 'Not provided'}</p>
+                        <p><strong>Location:</strong> ${resume["Location"] || 'Not provided'}</p>
+                        <p><strong>File:</strong> ${resume.filename || 'Unknown'}</p>
+                        ${linkedInHTML}
+                        ${githubHTML}
+                    </div>
+                    
+                    <div class="modal-section">
                         <h5>Education</h5>
                         ${educationHTML}
                     </div>
                     
-                    <div class="resume-section">
+                    <div class="modal-section">
                         <h5>Work Experience</h5>
                         ${experienceHTML}
                     </div>
                     
-                    <div class="resume-section">
+                    <div class="modal-section">
+                        <h5>Projects</h5>
+                        ${projectsHTML}
+                    </div>
+                    
+                    <div class="modal-section">
                         <h5>Technical Skills</h5>
                         <div class="skills-container">
-                            ${technicalSkills || '<p>No technical skills found</p>'}
+                            ${technicalSkills}
                         </div>
                     </div>
                     
-                    <div class="resume-section">
+                    <div class="modal-section">
                         <h5>Soft Skills</h5>
                         <div class="skills-container">
-                            ${softSkills || '<p>No soft skills found</p>'}
+                            ${softSkills}
                         </div>
                     </div>
                     
-                    <div class="resume-section">
+                    <div class="modal-section">
                         <h5>Recommended Roles</h5>
                         <p>${resume["Recommended Roles"] ? resume["Recommended Roles"].join(', ') : 'No recommended roles found'}</p>
                     </div>
                 `;
             }
+            
+            // Close modal
+            closeModal.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>
