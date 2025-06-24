@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Dashboard - Smart Resume Parser</title>
     <style>
         /* Reset and Base Styles */
         * {
@@ -72,163 +70,57 @@
         
         /* Main Content Styles */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
         
-        h1 {
+        .page-header {
             text-align: center;
-            color: #6e57e0;
             margin-bottom: 2rem;
         }
         
-        /* Stats Cards */
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .stat-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(110, 87, 224, 0.1);
+        .page-header h1 {
+            font-size: 2.5rem;
             color: #6e57e0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
+            margin-bottom: 0.5rem;
         }
         
-        .stat-icon i {
-            font-size: 1.5rem;
-        }
-        
-        .stat-info h3 {
-            font-size: 0.9rem;
+        .page-header p {
+            font-size: 1.1rem;
             color: #666;
-            margin-bottom: 0.3rem;
-        }
-        
-        .stat-info p {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
-        }
-        
-        /* Tabs */
-        .tabs {
-            margin-bottom: 2rem;
-        }
-        
-        .tab-buttons {
-            display: flex;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 1.5rem;
-        }
-        
-        .tab-button {
-            padding: 0.8rem 1.5rem;
-            background-color: transparent;
-            border: none;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            color: #666;
-            transition: all 0.3s;
-        }
-        
-        .tab-button:hover {
-            color: #6e57e0;
-        }
-        
-        .tab-button.active {
-            color: #6e57e0;
-            border-bottom-color: #6e57e0;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        /* Charts Section */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .chart-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-        }
-        
-        .chart-card h3 {
-            margin-bottom: 1rem;
-            color: #333;
-            font-size: 1.2rem;
-        }
-        
-        .chart-container {
-            height: 300px;
         }
         
         /* Search Section */
         .search-section {
             background-color: white;
-            border-radius: 8px;
+            border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
+            padding: 2rem;
             margin-bottom: 2rem;
         }
         
-        .search-section h3 {
-            margin-bottom: 1rem;
-            color: #333;
-            font-size: 1.2rem;
-        }
-        
-        .search-box {
+        .search-form {
             display: flex;
             gap: 1rem;
+            align-items: center;
             margin-bottom: 1.5rem;
         }
         
         .search-input {
             flex: 1;
-            padding: 0.8rem 1rem;
-            border: 1px solid #ddd;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
             border-radius: 4px;
             font-size: 1rem;
         }
         
-        .search-button {
+        .search-input:focus {
+            outline: none;
+            border-color: #6e57e0;
+        }
+        
+        .search-btn {
             background-color: #6e57e0;
             color: white;
             border: none;
@@ -236,93 +128,98 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 1rem;
-            display: flex;
-            align-items: center;
+            transition: background-color 0.3s;
         }
         
-        .search-button i {
-            margin-right: 0.5rem;
-        }
-        
-        .search-button:hover {
+        .search-btn:hover {
             background-color: #5a46c7;
         }
         
-        .search-results {
-            margin-top: 1.5rem;
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
         }
         
-        /* Resume List */
-        .resume-list {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
+        .filter-dropdown {
+            position: relative;
+            display: inline-block;
         }
         
-        .resume-list h3 {
-            margin-bottom: 1rem;
-            color: #333;
-            font-size: 1.2rem;
-        }
-        
-        .resume-card {
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-            position: relative; /* Added for rank badge positioning */
-        }
-        
-        .resume-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Rank Badge Styles */
-        .rank-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            width: 36px;
-            height: 36px;
-            background-color: #6e57e0;
+        .filter-btn {
+            background-color: #4caf50;
             color: white;
-            border-radius: 50%;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .filter-btn:hover {
+            background-color: #43a047;
+        }
+        
+        .filter-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1000;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            top: 100%;
+            left: 0;
+        }
+        
+        .filter-dropdown-content.show {
+            display: block;
+        }
+        
+        .filter-header {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
             font-weight: bold;
-            font-size: 1rem;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
-        
-        .resume-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-        
-        .resume-info h4 {
-            font-size: 1.2rem;
-            margin-bottom: 0.3rem;
             color: #333;
         }
         
-        .resume-info p {
-            color: #666;
+        .filter-options {
+            padding: 1rem;
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .filter-option input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+        
+        .filter-option label {
+            cursor: pointer;
             font-size: 0.9rem;
         }
         
-        .resume-actions {
+        .filter-actions {
+            padding: 1rem;
+            border-top: 1px solid #ddd;
             display: flex;
             gap: 0.5rem;
         }
         
-        .resume-action-btn {
+        .apply-filter-btn {
             background-color: #6e57e0;
             color: white;
             border: none;
@@ -330,171 +227,339 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 0.9rem;
+            flex: 1;
+        }
+        
+        .clear-filter-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            flex: 1;
+        }
+        
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .view-btn {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .view-btn:hover {
+            background-color: #138496;
+        }
+        
+        .view-btn.active {
+            background-color: #0c5460;
+        }
+        
+        /* Results Section */
+        .results-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .results-header h2 {
+            color: #6e57e0;
+        }
+        
+        .results-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .results-count {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .export-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
             display: flex;
             align-items: center;
-            text-decoration: none;
+            gap: 0.5rem;
         }
         
-        .resume-action-btn i {
-            margin-right: 0.5rem;
+        .export-btn:hover {
+            background-color: #218838;
         }
         
-        .resume-action-btn:hover {
-            background-color: #5a46c7;
+        /* Card View */
+        .resume-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
         }
         
-        .resume-action-btn.outline {
-            background-color: transparent;
+        .resume-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1.5rem;
+            background-color: #fafafa;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .resume-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .resume-card.ranked {
+            border-left: 4px solid #6e57e0;
+        }
+        
+        .rank-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #6e57e0;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .score-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4caf50;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .resume-card h4 {
             color: #6e57e0;
-            border: 1px solid #6e57e0;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
         }
         
-        .resume-action-btn.outline:hover {
-            background-color: rgba(110, 87, 224, 0.1);
+        .resume-info {
+            margin-bottom: 1rem;
         }
         
-        .resume-details {
-            margin-top: 1rem;
+        .resume-info p {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
         }
         
-        .resume-section {
-            margin-bottom: 0.8rem;
-        }
-        
-        .resume-section h5 {
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
+        .resume-info strong {
             color: #444;
+        }
+        
+        .skills-preview {
+            margin-bottom: 1rem;
         }
         
         .skills-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
         }
         
         .skill-tag {
             background-color: rgba(110, 87, 224, 0.1);
             color: #6e57e0;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
+            padding: 0.2rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+        
+        .skill-tag.highlighted {
+            background-color: #6e57e0;
+            color: white;
+        }
+        
+        .view-details-btn {
+            background-color: #6e57e0;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .view-details-btn:hover {
+            background-color: #5a46c7;
+        }
+        
+        /* Table View */
+        .table-container {
+            display: none;
+            overflow-x: auto;
+        }
+        
+        .table-container.active {
+            display: block;
+        }
+        
+        .resume-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .resume-table th,
+        .resume-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
             font-size: 0.9rem;
         }
         
-        .skill-tag.highlight {
-            background-color: rgba(110, 87, 224, 0.3);
+        .resume-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .resume-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .resume-table .cv-link {
+            color: #6e57e0;
+            text-decoration: none;
             font-weight: bold;
         }
         
-        /* Score indicator */
-        .score-indicator {
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .score-bar {
-            height: 6px;
-            background-color: #eee;
-            border-radius: 3px;
-            margin-top: 3px;
-            overflow: hidden;
-        }
-        
-        .score-fill {
-            height: 100%;
-            background-color: #6e57e0;
-            border-radius: 3px;
-        }
-        
-        /* Social links styling */
-        .social-link {
-            color: #6e57e0;
-            text-decoration: none;
-            transition: color 0.3s;
-            display: inline-flex;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        
-        .social-link i {
-            margin-right: 0.5rem;
-            font-size: 1.2rem;
-        }
-        
-        .social-link:hover {
-            color: #5a46c7;
+        .resume-table .cv-link:hover {
             text-decoration: underline;
         }
         
-        /* Modal */
+        .resume-table .skills-cell {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* Modal Styles */
         .modal {
             display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+        }
+        
+        .modal h3 {
+            color: #6e57e0;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-section h5 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #444;
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-        
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 800px;
-            position: relative;
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-        }
-        
-        .close-modal:hover {
-            color: #333;
-        }
-        
-        .modal-header {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .modal-header h3 {
-            font-size: 1.5rem;
-            color: #333;
-        }
-        
-        .modal-body {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        /* Loading Spinner */
-        .loading-spinner {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
+            z-index: 1000;
+            display: none;
         }
         
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(110, 87, 224, 0.1);
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: #6e57e0;
             animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
         }
         
         @keyframes spin {
@@ -503,27 +568,9 @@
             }
         }
         
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 3rem 1rem;
-        }
-        
-        .empty-state i {
-            font-size: 4rem;
-            color: #ddd;
-            margin-bottom: 1rem;
-        }
-        
-        .empty-state h3 {
-            font-size: 1.5rem;
-            color: #666;
-            margin-bottom: 1rem;
-        }
-        
-        .empty-state p {
-            color: #888;
-            margin-bottom: 1.5rem;
+        .loading-overlay p {
+            color: white;
+            font-size: 1.1rem;
         }
         
         /* Error message */
@@ -534,6 +581,54 @@
             border-radius: 4px;
             margin-bottom: 1rem;
             display: none;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: #999;
+        }
+        
+        .empty-state p {
+            margin-bottom: 2rem;
+        }
+        
+        .empty-state a {
+            background-color: #6e57e0;
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        
+        .empty-state a:hover {
+            background-color: #5a46c7;
+        }
+        
+        /* Social links styling */
+        .social-link {
+            color: #6e57e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .social-link:hover {
+            color: #5a46c7;
+            text-decoration: underline;
         }
         
         /* Footer */
@@ -561,24 +656,59 @@
                 margin-right: 0.5rem;
             }
             
-            .resume-header {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .search-form {
                 flex-direction: column;
             }
             
-            .resume-actions {
-                margin-top: 1rem;
+            .search-input {
+                width: 100%;
+            }
+            
+            .search-btn {
+                width: 100%;
+            }
+            
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-dropdown {
+                width: 100%;
+            }
+            
+            .filter-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .resume-cards-container {
+                grid-template-columns: 1fr;
             }
             
             .modal-content {
                 width: 95%;
+                margin: 2% auto;
                 padding: 1rem;
             }
             
-            .modal-body {
-                grid-template-columns: 1fr;
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .results-actions {
+                width: 100%;
+                justify-content: space-between;
             }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
@@ -591,106 +721,147 @@
                 <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="/dashboard" class="active"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
                 <li><a href="/form"><i class="fas fa-wpforms"></i> Application Form</a></li>
-                <li><a href="/skill_gap"><i class="fas fa-chart-line"></i> Skill Gap</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="container">
-        <h1>Resume Dashboard</h1>
+        <div class="page-header">
+            <h1>Resume Dashboard</h1>
+            <p>Search, filter, and manage all uploaded resumes. Find candidates by skills and view detailed information.</p>
+        </div>
 
-        <div id="error-message" class="error-message"></div>
-
-        <div class="stats-cards">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <div class="stat-info">
-                    <h3>Total Resumes</h3>
-                    <p id="total-resumes">0</p>
-                </div>
+        <div class="search-section">
+            <div class="search-form">
+                <input type="text" id="skill-search" class="search-input" placeholder="Search by skill (e.g., Python, JavaScript, React...)">
+                <button id="search-btn" class="search-btn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                <button id="show-all-btn" class="search-btn" style="background-color: #4caf50;">
+                    <i class="fas fa-list"></i> Show All
+                </button>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-check-circle"></i>
+            
+            <div class="filter-section">
+                <!-- Filter by Location -->
+                <div class="filter-dropdown">
+                    <button class="filter-btn" id="location-filter-btn">
+                        <i class="fas fa-map-marker-alt"></i> Filter by Location
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-dropdown-content" id="location-filter-dropdown">
+                        <div class="filter-header">Select Locations</div>
+                        <div class="filter-options" id="location-options">
+                            <!-- Options will be populated dynamically -->
+                        </div>
+                        <div class="filter-actions">
+                            <button class="apply-filter-btn" onclick="applyFilters()">Apply</button>
+                            <button class="clear-filter-btn" onclick="clearLocationFilter()">Clear</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-info">
-                    <h3>Top Skill</h3>
-                    <p id="top-skill">-</p>
+                
+                <!-- Filter by Skills -->
+                <div class="filter-dropdown">
+                    <button class="filter-btn" id="skills-filter-btn">
+                        <i class="fas fa-cogs"></i> Filter by Skills
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-dropdown-content" id="skills-filter-dropdown">
+                        <div class="filter-header">Select Skills</div>
+                        <div class="filter-options" id="skills-options">
+                            <!-- Options will be populated dynamically -->
+                        </div>
+                        <div class="filter-actions">
+                            <button class="apply-filter-btn" onclick="applyFilters()">Apply</button>
+                            <button class="clear-filter-btn" onclick="clearSkillsFilter()">Clear</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-briefcase"></i>
+                
+                <!-- Filter by Experience -->
+                <div class="filter-dropdown">
+                    <button class="filter-btn" id="experience-filter-btn">
+                        <i class="fas fa-briefcase"></i> Filter by Experience
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-dropdown-content" id="experience-filter-dropdown">
+                        <div class="filter-header">Select Experience</div>
+                        <div class="filter-options" id="experience-options">
+                            <!-- Options will be populated dynamically -->
+                        </div>
+                        <div class="filter-actions">
+                            <button class="apply-filter-btn" onclick="applyFilters()">Apply</button>
+                            <button class="clear-filter-btn" onclick="clearExperienceFilter()">Clear</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-info">
-                    <h3>Top Role</h3>
-                    <p id="top-role">-</p>
+                
+                <!-- View Toggle -->
+                <div class="view-toggle">
+                    <button class="view-btn active" id="card-view-btn">
+                        <i class="fas fa-th-large"></i> Cards
+                    </button>
+                    <button class="view-btn" id="table-view-btn">
+                        <i class="fas fa-table"></i> Table
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="tabs">
-            <div class="tab-buttons">
-                <button class="tab-button active" data-tab="charts">Charts</button>
-                <button class="tab-button" data-tab="search">Search</button>
-                <button class="tab-button" data-tab="resumes">All Resumes</button>
-            </div>
-
-            <div id="charts-tab" class="tab-content active">
-                <div class="charts-grid">
-                    <div class="chart-card">
-                        <h3>Skills Distribution</h3>
-                        <div class="chart-container">
-                            <canvas id="skills-chart"></canvas>
-                        </div>
-                    </div>
-                    <div class="chart-card">
-                        <h3>Roles Distribution</h3>
-                        <div class="chart-container">
-                            <canvas id="roles-chart"></canvas>
-                        </div>
-                    </div>
+        <div class="results-section">
+            <div class="results-header">
+                <h2 id="results-title">All Resumes</h2>
+                <div class="results-actions">
+                    <span id="results-count" class="results-count">Loading...</span>
+                    <button id="export-csv-btn" class="export-btn">
+                        <i class="fas fa-download"></i> Export CSV
+                    </button>
                 </div>
             </div>
-
-            <div id="search-tab" class="tab-content">
-                <div class="search-section">
-                    <h3>Search Resumes by Skill</h3>
-                    <div class="search-box">
-                        <input type="text" id="skill-search" class="search-input" placeholder="Enter skill (e.g., Python, React, AWS)">
-                        <button id="search-btn" class="search-button">
-                            <i class="fas fa-search"></i> Search
-                        </button>
-                    </div>
-                    <div id="search-results" class="search-results"></div>
-                </div>
+            <div id="error-message" class="error-message"></div>
+            
+            <!-- Card View -->
+            <div class="resume-cards-container" id="resume-cards-container">
+                <!-- Resume cards will be displayed here -->
             </div>
-
-            <div id="resumes-tab" class="tab-content">
-                <div class="resume-list">
-                    <h3>All Resumes</h3>
-                    <div id="resume-list-container">
-                        <div class="loading-spinner">
-                            <div class="spinner"></div>
-                        </div>
-                    </div>
-                </div>
+            
+            <!-- Table View -->
+            <div class="table-container" id="table-container">
+                <table class="resume-table" id="resume-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Location</th>
+                            <th>Technical Skills</th>
+                            <th>Experience</th>
+                            <th>CV URL</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resume-table-body">
+                        <!-- Table rows will be populated here -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
+    <!-- Modal for detailed view -->
     <div id="resume-modal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" id="close-modal">&times;</span>
-            <div class="modal-header">
-                <h3 id="modal-resume-name">Resume Details</h3>
-            </div>
-            <div class="modal-body" id="modal-resume-details">
-                <!-- Resume details will be displayed here -->
+            <span class="close">&times;</span>
+            <div id="modal-resume-details">
+                <!-- Detailed resume info will be displayed here -->
             </div>
         </div>
+    </div>
+
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Processing...</p>
     </div>
 
     <footer>
@@ -700,598 +871,742 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // DOM Elements
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('.tab-content');
-            const resumeListContainer = document.getElementById('resume-list-container');
-            const searchInput = document.getElementById('skill-search');
+            const skillSearch = document.getElementById('skill-search');
             const searchBtn = document.getElementById('search-btn');
-            const searchResults = document.getElementById('search-results');
-            const modal = document.getElementById('resume-modal');
-            const closeModal = document.getElementById('close-modal');
-            const modalResumeName = document.getElementById('modal-resume-name');
-            const modalResumeDetails = document.getElementById('modal-resume-details');
+            const showAllBtn = document.getElementById('show-all-btn');
+            const resultsTitle = document.getElementById('results-title');
+            const resultsCount = document.getElementById('results-count');
+            const resumeCardsContainer = document.getElementById('resume-cards-container');
+            const tableContainer = document.getElementById('table-container');
+            const resumeTableBody = document.getElementById('resume-table-body');
+            const loadingOverlay = document.getElementById('loading-overlay');
             const errorMessage = document.getElementById('error-message');
+            const modal = document.getElementById('resume-modal');
+            const modalContent = document.getElementById('modal-resume-details');
+            const closeModal = document.querySelector('.close');
+            const exportCsvBtn = document.getElementById('export-csv-btn');
+            const cardViewBtn = document.getElementById('card-view-btn');
+            const tableViewBtn = document.getElementById('table-view-btn');
             
-            // Charts
-            let skillsChart;
-            let rolesChart;
+            // Filter elements
+            const locationFilterBtn = document.getElementById('location-filter-btn');
+            const skillsFilterBtn = document.getElementById('skills-filter-btn');
+            const experienceFilterBtn = document.getElementById('experience-filter-btn');
+            const locationFilterDropdown = document.getElementById('location-filter-dropdown');
+            const skillsFilterDropdown = document.getElementById('skills-filter-dropdown');
+            const experienceFilterDropdown = document.getElementById('experience-filter-dropdown');
             
-            // Tab switching
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const tabId = button.getAttribute('data-tab');
-                    
-                    // Remove active class from all buttons and tabs
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    tabContents.forEach(tab => tab.classList.remove('active'));
-                    
-                    // Add active class to current button and tab
-                    button.classList.add('active');
-                    document.getElementById(`${tabId}-tab`).classList.add('active');
-                    
-                    // Load data for the selected tab
-                    if (tabId === 'resumes' && resumeListContainer.innerHTML === '<div class="loading-spinner"><div class="spinner"></div></div>') {
-                        loadResumes();
-                    }
-                });
-            });
+            let currentSearchSkill = '';
+            let currentResumes = [];
+            let filterOptions = {};
+            let currentView = 'cards';
             
-            // Load initial data
-            loadDashboardData();
+            // Initialize
+            loadFilterOptions();
+            loadAllResumes();
             
-            // Close modal when clicking the close button
-            closeModal.addEventListener('click', () => {
-                modal.style.display = 'none';
-            });
-            
-            // Close modal when clicking outside the modal content
-            window.addEventListener('click', (event) => {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-            
-            // Search button click event
+            // Search functionality
             searchBtn.addEventListener('click', searchResumes);
-            
-            // Search on Enter key
-            searchInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
+            skillSearch.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
                     searchResumes();
                 }
             });
             
-            // Show error message
-            function showError(message) {
-                errorMessage.textContent = message;
-                errorMessage.style.display = 'block';
-            }
+            // Show all resumes
+            showAllBtn.addEventListener('click', loadAllResumes);
             
-            // Hide error message
-            function hideError() {
-                errorMessage.style.display = 'none';
-            }
+            // View toggle
+            cardViewBtn.addEventListener('click', () => switchView('cards'));
+            tableViewBtn.addEventListener('click', () => switchView('table'));
             
-            // Load dashboard data
-            function loadDashboardData() {
-                fetch('/get_resumes')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(resumes => {
-                        // Update stats
-                        document.getElementById('total-resumes').textContent = resumes.length;
-                        
-                        // Load detailed data for each resume
-                        const promises = resumes.map(resume => 
-                            fetch(`/get_resume/${resume._id}`)
-                                .then(response => response.json())
-                        );
-                        
-                        return Promise.all(promises);
-                    })
-                    .then(detailedResumes => {
-                        // Process detailed resume data
-                        processResumeData(detailedResumes);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        showError('Error loading dashboard data. Please try again later.');
-                    });
-            }
+            // Filter dropdowns
+            locationFilterBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleDropdown('location-filter-dropdown');
+            });
             
-            // Process resume data for charts and stats
-            function processResumeData(resumes) {
-                // Skills analysis
-                const skillsMap = new Map();
-                resumes.forEach(resume => {
-                    if (resume.Skills && resume.Skills.Technical) {
-                        resume.Skills.Technical.forEach(skill => {
-                            skillsMap.set(skill, (skillsMap.get(skill) || 0) + 1);
-                        });
-                    }
-                });
+            skillsFilterBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleDropdown('skills-filter-dropdown');
+            });
+            
+            experienceFilterBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleDropdown('experience-filter-dropdown');
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.filter-dropdown')) {
+                    closeAllDropdowns();
+                }
+            });
+            
+            // Export CSV
+            exportCsvBtn.addEventListener('click', exportToCSV);
+            
+            function switchView(view) {
+                currentView = view;
                 
-                // Roles analysis
-                const rolesMap = new Map();
-                resumes.forEach(resume => {
-                    if (resume["Recommended Roles"]) {
-                        resume["Recommended Roles"].forEach(role => {
-                            rolesMap.set(role, (rolesMap.get(role) || 0) + 1);
-                        });
-                    }
-                });
-                
-                // Update top skill
-                if (skillsMap.size > 0) {
-                    const topSkill = [...skillsMap.entries()].sort((a, b) => b[1] - a[1])[0];
-                    document.getElementById('top-skill').textContent = topSkill[0];
+                if (view === 'cards') {
+                    cardViewBtn.classList.add('active');
+                    tableViewBtn.classList.remove('active');
+                    resumeCardsContainer.style.display = 'grid';
+                    tableContainer.classList.remove('active');
+                } else {
+                    tableViewBtn.classList.add('active');
+                    cardViewBtn.classList.remove('active');
+                    resumeCardsContainer.style.display = 'none';
+                    tableContainer.classList.add('active');
                 }
                 
-                // Update top role
-                if (rolesMap.size > 0) {
-                    const topRole = [...rolesMap.entries()].sort((a, b) => b[1] - a[1])[0];
-                    document.getElementById('top-role').textContent = topRole[0];
-                }
-                
-                // Create charts
-                createSkillsChart(skillsMap);
-                createRolesChart(rolesMap);
+                displayResumes(currentResumes);
             }
             
-            // Create skills chart
-            function createSkillsChart(skillsMap) {
-                // Sort skills by count and take top 10
-                const sortedSkills = [...skillsMap.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);
-                
-                // Extract labels and data
-                const labels = sortedSkills.map(item => item[0]);
-                const data = sortedSkills.map(item => item[1]);
-                
-                // Generate colors
-                const colors = generateColors(labels.length, 250); // Purple-ish hue
-                
-                // Create chart
-                const ctx = document.getElementById('skills-chart').getContext('2d');
-                
-                // Destroy existing chart if it exists
-                if (skillsChart) {
-                    skillsChart.destroy();
-                }
-                
-                if (labels.length === 0) {
-                    // No data
-                    document.getElementById('skills-chart').parentElement.innerHTML = '<div class="empty-state"><i class="fas fa-chart-bar"></i><p>No skills data available</p></div>';
-                    return;
-                }
-                
-                skillsChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [
-                            {
-                                label: 'Number of Resumes',
-                                data: data,
-                                backgroundColor: colors,
-                                borderColor: colors,
-                                borderWidth: 1,
-                            },
-                        ],
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false,
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: (context) => `${context.parsed.y} resume(s)`,
-                                },
-                            },
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    precision: 0,
-                                },
-                            },
-                        },
-                    },
+            function toggleDropdown(dropdownId) {
+                closeAllDropdowns();
+                const dropdown = document.getElementById(dropdownId);
+                dropdown.classList.toggle('show');
+            }
+            
+            function closeAllDropdowns() {
+                document.querySelectorAll('.filter-dropdown-content').forEach(dropdown => {
+                    dropdown.classList.remove('show');
                 });
             }
             
-            // Create roles chart
-            function createRolesChart(rolesMap) {
-                // Sort roles by count and take top 5
-                const sortedRoles = [...rolesMap.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
-                
-                // Extract labels and data
-                const labels = sortedRoles.map(item => item[0]);
-                const data = sortedRoles.map(item => item[1]);
-                
-                // Generate colors
-                const colors = generateColors(labels.length, 200); // Blue-ish hue
-                
-                // Create chart
-                const ctx = document.getElementById('roles-chart').getContext('2d');
-                
-                // Destroy existing chart if it exists
-                if (rolesChart) {
-                    rolesChart.destroy();
-                }
-                
-                if (labels.length === 0) {
-                    // No data
-                    document.getElementById('roles-chart').parentElement.innerHTML = '<div class="empty-state"><i class="fas fa-chart-bar"></i><p>No roles data available</p></div>';
-                    return;
-                }
-                
-                rolesChart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: labels,
-                        datasets: [
-                            {
-                                data: data,
-                                backgroundColor: colors,
-                                borderColor: colors,
-                                borderWidth: 1,
-                            },
-                        ],
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: (context) => `${context.label}: ${context.parsed} resume(s)`,
-                                },
-                            },
-                        },
-                    },
+            function loadFilterOptions() {
+                fetch('/get_filter_options')
+                .then(response => response.json())
+                .then(data => {
+                    filterOptions = data;
+                    populateFilterOptions();
+                })
+                .catch(error => {
+                    console.error('Error loading filter options:', error);
                 });
             }
             
-            // Generate colors with a different base hue
-            function generateColors(count, baseHue) {
-                const colors = [];
+            function populateFilterOptions() {
+                // Populate location options
+                const locationOptions = document.getElementById('location-options');
+                locationOptions.innerHTML = '';
+                filterOptions.locations.forEach(location => {
+                    const option = createFilterOption('location', location);
+                    locationOptions.appendChild(option);
+                });
                 
-                for (let i = 0; i < count; i++) {
-                    const hue = (baseHue + i * 30) % 360;
-                    colors.push(`hsla(${hue}, 70%, 60%, 0.7)`);
-                }
+                // Populate skills options
+                const skillsOptions = document.getElementById('skills-options');
+                skillsOptions.innerHTML = '';
                 
-                return colors;
-            }
-            
-            // Load resumes
-            function loadResumes() {
-                resumeListContainer.innerHTML = '<div class="loading-spinner"><div class="spinner"></div></div>';
-                
-                fetch('/get_resumes')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(resumes => {
-                        displayResumes(resumes);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        resumeListContainer.innerHTML = `
-                            <div class="empty-state">
-                                <i class="fas fa-exclamation-circle"></i>
-                                <h3>Error Loading Resumes</h3>
-                                <p>An error occurred while loading resumes. Please try again later.</p>
-                            </div>
-                        `;
-                    });
-            }
-            
-            // Display resumes
-            function displayResumes(resumes) {
-                if (resumes.length === 0) {
-                    resumeListContainer.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-file-alt"></i>
-                            <h3>No Resumes Found</h3>
-                            <p>Upload some resumes to get started.</p>
-                            <a href="/" class="resume-action-btn">
-                                <i class="fas fa-upload"></i> Upload Resume
-                            </a>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                let html = '';
-                
-                resumes.forEach(resume => {
-                    const name = resume["Full Name"] || 'Unnamed';
-                    const email = resume["Email Address"] || 'No email';
-                    const uploadDate = new Date(resume.upload_date).toLocaleDateString();
+                // Technical skills
+                if (filterOptions.technical_skills.length > 0) {
+                    const techHeader = document.createElement('div');
+                    techHeader.style.fontWeight = 'bold';
+                    techHeader.style.marginBottom = '0.5rem';
+                    techHeader.style.color = '#6e57e0';
+                    techHeader.textContent = 'Technical Skills';
+                    skillsOptions.appendChild(techHeader);
                     
-                    html += `
-                        <div class="resume-card">
-                            <div class="resume-header">
-                                <div class="resume-info">
-                                    <h4>${name}</h4>
-                                    <p>${email}</p>
-                                    <p><small>Uploaded: ${uploadDate}</small></p>
-                                </div>
-                                <div class="resume-actions">
-                                    <a href="/form?resume=${resume._id}" class="resume-action-btn outline">
-                                        <i class="fas fa-wpforms"></i> Auto-Fill
-                                    </a>
-                                    <button class="resume-action-btn view-resume-btn" data-id="${resume._id}">
-                                        <i class="fas fa-eye"></i> View
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+                    filterOptions.technical_skills.forEach(skill => {
+                        const option = createFilterOption('technical_skills', skill);
+                        skillsOptions.appendChild(option);
+                    });
+                }
+                
+                // Soft skills
+                if (filterOptions.soft_skills.length > 0) {
+                    const softHeader = document.createElement('div');
+                    softHeader.style.fontWeight = 'bold';
+                    softHeader.style.marginTop = '1rem';
+                    softHeader.style.marginBottom = '0.5rem';
+                    softHeader.style.color = '#28a745';
+                    softHeader.textContent = 'Soft Skills';
+                    skillsOptions.appendChild(softHeader);
+                    
+                    filterOptions.soft_skills.forEach(skill => {
+                        const option = createFilterOption('soft_skills', skill);
+                        skillsOptions.appendChild(option);
+                    });
+                }
+                
+                // Populate experience options
+                const experienceOptions = document.getElementById('experience-options');
+                experienceOptions.innerHTML = '';
+                
+                // Companies
+                if (filterOptions.companies.length > 0) {
+                    const companyHeader = document.createElement('div');
+                    companyHeader.style.fontWeight = 'bold';
+                    companyHeader.style.marginBottom = '0.5rem';
+                    companyHeader.style.color = '#6e57e0';
+                    companyHeader.textContent = 'Companies';
+                    experienceOptions.appendChild(companyHeader);
+                    
+                    filterOptions.companies.forEach(company => {
+                        const option = createFilterOption('companies', company);
+                        experienceOptions.appendChild(option);
+                    });
+                }
+                
+                // Roles
+                if (filterOptions.roles.length > 0) {
+                    const roleHeader = document.createElement('div');
+                    roleHeader.style.fontWeight = 'bold';
+                    roleHeader.style.marginTop = '1rem';
+                    roleHeader.style.marginBottom = '0.5rem';
+                    roleHeader.style.color = '#28a745';
+                    roleHeader.textContent = 'Roles';
+                    experienceOptions.appendChild(roleHeader);
+                    
+                    filterOptions.roles.forEach(role => {
+                        const option = createFilterOption('roles', role);
+                        experienceOptions.appendChild(option);
+                    });
+                }
+                
+                // Degrees
+                if (filterOptions.degrees.length > 0) {
+                    const degreeHeader = document.createElement('div');
+                    degreeHeader.style.fontWeight = 'bold';
+                    degreeHeader.style.marginTop = '1rem';
+                    degreeHeader.style.marginBottom = '0.5rem';
+                    degreeHeader.style.color = '#17a2b8';
+                    degreeHeader.textContent = 'Degrees';
+                    experienceOptions.appendChild(degreeHeader);
+                    
+                    filterOptions.degrees.forEach(degree => {
+                        const option = createFilterOption('degrees', degree);
+                        experienceOptions.appendChild(option);
+                    });
+                }
+                
+                // Institutions
+                if (filterOptions.institutions.length > 0) {
+                    const institutionHeader = document.createElement('div');
+                    institutionHeader.style.fontWeight = 'bold';
+                    institutionHeader.style.marginTop = '1rem';
+                    institutionHeader.style.marginBottom = '0.5rem';
+                    institutionHeader.style.color = '#ffc107';
+                    institutionHeader.textContent = 'Institutions';
+                    experienceOptions.appendChild(institutionHeader);
+                    
+                    filterOptions.institutions.forEach(institution => {
+                        const option = createFilterOption('institutions', institution);
+                        experienceOptions.appendChild(option);
+                    });
+                }
+            }
+            
+            function createFilterOption(category, value) {
+                const option = document.createElement('div');
+                option.className = 'filter-option';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `${category}-${value.replace(/\s+/g, '-')}`;
+                checkbox.value = value;
+                checkbox.dataset.category = category;
+                
+                const label = document.createElement('label');
+                label.htmlFor = checkbox.id;
+                label.textContent = value;
+                
+                option.appendChild(checkbox);
+                option.appendChild(label);
+                
+                return option;
+            }
+            
+            function applyFilters() {
+                const selectedFilters = {
+                    locations: [],
+                    technical_skills: [],
+                    soft_skills: [],
+                    companies: [],
+                    roles: [],
+                    degrees: [],
+                    institutions: []
+                };
+                
+                // Collect selected filters
+                document.querySelectorAll('.filter-option input[type="checkbox"]:checked').forEach(checkbox => {
+                    const category = checkbox.dataset.category;
+                    const value = checkbox.value;
+                    selectedFilters[category].push(value);
                 });
                 
-                resumeListContainer.innerHTML = html;
+                // Check if any filters are selected
+                const hasFilters = Object.values(selectedFilters).some(arr => arr.length > 0);
                 
-                // Add event listeners to view buttons
-                document.querySelectorAll('.view-resume-btn').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const resumeId = button.getAttribute('data-id');
-                        viewResumeDetails(resumeId);
-                    });
+                if (!hasFilters) {
+                    loadAllResumes();
+                    return;
+                }
+                
+                loadingOverlay.style.display = 'flex';
+                errorMessage.style.display = 'none';
+                
+                fetch('/filter_resumes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(selectedFilters)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    loadingOverlay.style.display = 'none';
+                    
+                    if (data.error) {
+                        showError(data.error);
+                        return;
+                    }
+                    
+                    currentResumes = data;
+                    currentSearchSkill = '';
+                    
+                    // Update title
+                    const filterCount = Object.values(selectedFilters).reduce((sum, arr) => sum + arr.length, 0);
+                    resultsTitle.textContent = `Filtered Results (${filterCount} filter${filterCount > 1 ? 's' : ''} applied)`;
+                    resultsCount.textContent = `${data.length} resume${data.length !== 1 ? 's' : ''} found`;
+                    
+                    if (data.length === 0) {
+                        showEmptyState('No resumes match the selected filters.');
+                    } else {
+                        displayResumes(data);
+                    }
+                    
+                    closeAllDropdowns();
+                })
+                .catch(error => {
+                    loadingOverlay.style.display = 'none';
+                    console.error('Error:', error);
+                    showError('An error occurred while filtering resumes. Please try again.');
                 });
             }
             
-            // View resume details
-            function viewResumeDetails(resumeId) {
-                modalResumeDetails.innerHTML = '<div class="loading-spinner"><div class="spinner"></div></div>';
-                modal.style.display = 'block';
-                
-                fetch(`/get_resume/${resumeId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(resume => {
-                        modalResumeName.textContent = resume["Full Name"] || 'Resume Details';
-                        
-                        // Format education
-                        const educationHTML = resume.Education && resume.Education.length > 0 ? 
-                            resume.Education.map(edu => 
-                                `<div class="resume-section">
-                                    <h5>${edu.Degree || 'Not specified'}</h5>
-                                    <p>${edu.Institution || 'Not specified'}</p>
-                                    <p><small>${edu.Years || 'Not specified'}</small></p>
-                                </div>`
-                            ).join('') : '<p>No education information found</p>';
-                        
-                        // Format work experience
-                        const experienceHTML = resume["Work Experience"] && resume["Work Experience"].length > 0 ? 
-                            resume["Work Experience"].map(exp => 
-                                `<div class="resume-section">
-                                    <h5>${exp.Role || 'Not specified'}</h5>
-                                    <p>${exp.Company || 'Not specified'}</p>
-                                    <p><small>${exp.Years || 'Not specified'}</small></p>
-                                </div>`
-                            ).join('') : '<p>No work experience found</p>';
-                        
-                        // Format technical skills
-                        const technicalSkills = resume.Skills && resume.Skills.Technical ? 
-                            resume.Skills.Technical.map(skill => 
-                                `<span class="skill-tag">${skill}</span>`
-                            ).join(' ') : '<p>No technical skills found</p>';
-                        
-                        // Format soft skills
-                        const softSkills = resume.Skills && resume.Skills.Soft ? 
-                            resume.Skills.Soft.map(skill => 
-                                `<span class="skill-tag">${skill}</span>`
-                            ).join(' ') : '<p>No soft skills found</p>';
-                        
-                        // Format social profiles with icons
-                        const socialHTML = `
-                            <div class="resume-section">
-                                <h5>Social Profiles</h5>
-                                ${resume["LinkedIn"] ? 
-                                    `<a href="${resume["LinkedIn"]}" target="_blank" class="social-link">
-                                        <i class="fab fa-linkedin"></i> ${resume["LinkedIn"]}
-                                    </a>` : 
-                                    '<p><i class="fab fa-linkedin"></i> Not provided</p>'}
-                                ${resume["GitHub"] ? 
-                                    `<a href="${resume["GitHub"]}" target="_blank" class="social-link">
-                                        <i class="fab fa-github"></i> ${resume["GitHub"]}
-                                    </a>` : 
-                                    '<p><i class="fab fa-github"></i> Not provided</p>'}
-                            </div>
-                        `;
-                        
-                        // Build HTML
-                        modalResumeDetails.innerHTML = `
-                            <div>
-                                <div class="resume-section">
-                                    <h5>Contact Information</h5>
-                                    <p><strong>Email:</strong> ${resume["Email Address"] || 'Not provided'}</p>
-                                    <p><strong>Phone:</strong> ${resume["Contact Number"] || 'Not provided'}</p>
-                                    <p><strong>Location:</strong> ${resume["Location"] || 'Not provided'}</p>
-                                </div>
-                                
-                                ${socialHTML}
-                                
-                                <div class="resume-section">
-                                    <h5>Education</h5>
-                                    ${educationHTML}
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <div class="resume-section">
-                                    <h5>Work Experience</h5>
-                                    ${experienceHTML}
-                                </div>
-                                
-                                <div class="resume-section">
-                                    <h5>Technical Skills</h5>
-                                    <div class="skills-container">
-                                        ${technicalSkills}
-                                    </div>
-                                </div>
-                                
-                                <div class="resume-section">
-                                    <h5>Soft Skills</h5>
-                                    <div class="skills-container">
-                                        ${softSkills}
-                                    </div>
-                                </div>
-                                
-                                <div class="resume-section">
-                                    <h5>Recommended Roles</h5>
-                                    <p>${resume["Recommended Roles"] ? resume["Recommended Roles"].join(', ') : 'No recommended roles found'}</p>
-                                </div>
-                                
-                                <div class="resume-actions" style="margin-top: 20px;">
-                                    <a href="/form?resume=${resume._id}" class="resume-action-btn">
-                                        <i class="fas fa-wpforms"></i> Auto-Fill Form
-                                    </a>
-                                    <a href="/skill_gap?resume=${resume._id}" class="resume-action-btn">
-                                        <i class="fas fa-chart-line"></i> Skill Gap Analysis
-                                    </a>
-                                </div>
-                            </div>
-                        `;
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        modalResumeDetails.innerHTML = `
-                            <div class="empty-state">
-                                <i class="fas fa-exclamation-circle"></i>
-                                <h3>Error Loading Resume</h3>
-                                <p>An error occurred while loading the resume details. Please try again later.</p>
-                            </div>
-                        `;
-                    });
+            function clearLocationFilter() {
+                document.querySelectorAll('#location-options input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
             }
             
-            // Search resumes
+            function clearSkillsFilter() {
+                document.querySelectorAll('#skills-options input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+            }
+            
+            function clearExperienceFilter() {
+                document.querySelectorAll('#experience-options input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+            }
+            
+            // Make these functions global so they can be called from HTML
+            window.applyFilters = applyFilters;
+            window.clearLocationFilter = clearLocationFilter;
+            window.clearSkillsFilter = clearSkillsFilter;
+            window.clearExperienceFilter = clearExperienceFilter;
+            
             function searchResumes() {
-                const skill = searchInput.value.trim();
-                
+                const skill = skillSearch.value.trim();
                 if (!skill) {
                     showError('Please enter a skill to search for.');
                     return;
                 }
                 
-                hideError();
-                searchResults.innerHTML = '<div class="loading-spinner"><div class="spinner"></div></div>';
+                currentSearchSkill = skill;
+                loadingOverlay.style.display = 'flex';
+                errorMessage.style.display = 'none';
                 
                 fetch(`/search_resumes?skill=${encodeURIComponent(skill)}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(resumes => {
-                        if (resumes.error) {
-                            throw new Error(resumes.error);
-                        }
-                        
-                        if (resumes.length === 0) {
-                            searchResults.innerHTML = `
-                                <div class="empty-state">
-                                    <i class="fas fa-search"></i>
-                                    <h3>No Results Found</h3>
-                                    <p>No resumes found with the skill "${skill}".</p>
-                                </div>
-                            `;
-                            return;
-                        }
-                        
-                        let html = `<h3>Found ${resumes.length} resume${resumes.length !== 1 ? 's' : ''} with "${skill}" skill</h3>`;
-                        
-                        resumes.forEach(resume => {
-                            const name = resume["Full Name"] || 'Unnamed';
-                            const email = resume["Email Address"] || 'No email';
-                            const skills = resume.Skills && resume.Skills.Technical ? resume.Skills.Technical : [];
-                            
-                            // Calculate score percentage for the progress bar
-                            const scorePercentage = resume.score ? Math.min(100, Math.round((resume.score / 100) * 100)) : 0;
-                            
-                            html += `
-                                <div class="resume-card">
-                                    <!-- Add rank badge -->
-                                    ${resume.rank ? `<div class="rank-badge">${resume.rank}</div>` : ''}
-                                    
-                                    <div class="resume-header">
-                                        <div class="resume-info">
-                                            <h4>${name}</h4>
-                                            <p>${email}</p>
-                                        </div>
-                                        <div class="resume-actions">
-                                            <button class="resume-action-btn view-resume-btn" data-id="${resume._id}">
-                                                <i class="fas fa-eye"></i> View
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="resume-details">
-                                        <div class="resume-section">
-                                            <h5>Skills</h5>
-                                            <div class="skills-container">
-                                                ${Array.isArray(skills) ? skills.map(s => `
-                                                    <span class="skill-tag ${s.toLowerCase().includes(skill.toLowerCase()) ? 'highlight' : ''}">
-                                                        ${s}
-                                                    </span>
-                                                `).join('') : ''}
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Add score indicator -->
-                                        ${resume.score ? `
-                                        <div class="score-indicator">
-                                            <div>Match Score: ${resume.score} points</div>
-                                            <div class="score-bar">
-                                                <div class="score-fill" style="width: ${scorePercentage}%"></div>
-                                            </div>
-                                        </div>
-                                        ` : ''}
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        
-                        searchResults.innerHTML = html;
-                        
-                        // Add event listeners to view buttons
-                        document.querySelectorAll('.view-resume-btn').forEach(button => {
-                            button.addEventListener('click', () => {
-                                const resumeId = button.getAttribute('data-id');
-                                viewResumeDetails(resumeId);
-                            });
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        searchResults.innerHTML = `
-                            <div class="empty-state">
-                                <i class="fas fa-exclamation-circle"></i>
-                                <h3>Error Searching Resumes</h3>
-                                <p>An error occurred while searching resumes. Please try again later.</p>
-                                <p><small>${error.message}</small></p>
-                            </div>
-                        `;
-                    });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    loadingOverlay.style.display = 'none';
+                    
+                    if (data.error) {
+                        showError(data.error);
+                        return;
+                    }
+                    
+                    currentResumes = data;
+                    resultsTitle.textContent = `Search Results for "${skill}"`;
+                    resultsCount.textContent = `${data.length} resume${data.length !== 1 ? 's' : ''} found`;
+                    
+                    if (data.length === 0) {
+                        showEmptyState(`No resumes found with the skill "${skill}".`);
+                    } else {
+                        displayResumes(data, true);
+                    }
+                })
+                .catch(error => {
+                    loadingOverlay.style.display = 'none';
+                    console.error('Error:', error);
+                    showError('An error occurred while searching resumes. Please try again.');
+                });
             }
+            
+            function loadAllResumes() {
+                currentSearchSkill = '';
+                skillSearch.value = '';
+                loadingOverlay.style.display = 'flex';
+                errorMessage.style.display = 'none';
+                
+                // Clear all filters
+                document.querySelectorAll('.filter-option input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                fetch('/get_resumes')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    loadingOverlay.style.display = 'none';
+                    
+                    currentResumes = data;
+                    resultsTitle.textContent = 'All Resumes';
+                    resultsCount.textContent = `${data.length} resume${data.length !== 1 ? 's' : ''} total`;
+                    
+                    if (data.length === 0) {
+                        showEmptyState('No resumes uploaded yet. Upload some resumes to get started.');
+                    } else {
+                        displayResumes(data, false);
+                    }
+                })
+                .catch(error => {
+                    loadingOverlay.style.display = 'none';
+                    console.error('Error:', error);
+                    showError('An error occurred while loading resumes. Please try again.');
+                });
+            }
+            
+            function displayResumes(resumes, isSearchResult = false) {
+                if (currentView === 'cards') {
+                    displayResumeCards(resumes, isSearchResult);
+                } else {
+                    displayResumeTable(resumes);
+                }
+            }
+            
+            function displayResumeCards(resumes, isSearchResult = false) {
+                resumeCardsContainer.innerHTML = '';
+                
+                resumes.forEach(resume => {
+                    const card = createResumeCard(resume, isSearchResult);
+                    resumeCardsContainer.appendChild(card);
+                });
+            }
+            
+            function displayResumeTable(resumes) {
+                resumeTableBody.innerHTML = '';
+                
+                resumes.forEach(resume => {
+                    const row = createResumeTableRow(resume);
+                    resumeTableBody.appendChild(row);
+                });
+            }
+            
+            function createResumeCard(resume, isSearchResult = false) {
+                const card = document.createElement('div');
+                card.className = 'resume-card';
+                
+                if (isSearchResult) {
+                    card.classList.add('ranked');
+                }
+                
+                const technicalSkills = resume.Skills?.Technical || [];
+                const skillsPreview = technicalSkills.slice(0, 3).map(skill => {
+                    const isHighlighted = currentSearchSkill && 
+                        skill.toLowerCase().includes(currentSearchSkill.toLowerCase());
+                    return `<span class="skill-tag ${isHighlighted ? 'highlighted' : ''}">${skill}</span>`;
+                }).join(' ');
+                
+                const moreSkillsText = technicalSkills.length > 3 ? 
+                    `<span class="skill-tag">+${technicalSkills.length - 3} more</span>` : '';
+                
+                const rankBadge = isSearchResult && resume.rank ? 
+                    `<div class="rank-badge">${resume.rank}</div>` : '';
+                
+                const scoreBadge = isSearchResult && resume.score !== undefined ? 
+                    `<div class="score-badge">${resume.score}%</div>` : '';
+                
+                card.innerHTML = `
+                    ${rankBadge}
+                    ${scoreBadge}
+                    <h4>${resume["Full Name"] || 'Name not found'}</h4>
+                    <div class="resume-info">
+                        <p><strong>Email:</strong> ${resume["Email Address"] || 'Not provided'}</p>
+                        <p><strong>Phone:</strong> ${resume["Contact Number"] || 'Not provided'}</p>
+                        <p><strong>Location:</strong> ${resume["Location"] || 'Not provided'}</p>
+                        ${resume.filename ? `<p><strong>File:</strong> ${resume.filename}</p>` : ''}
+                        ${resume.cv_url ? `<p><strong>CV URL:</strong> <a href="${resume.cv_url}" target="_blank" class="social-link">${window.location.origin}${resume.cv_url}</a></p>` : ''}
+                    </div>
+                    <div class="skills-preview">
+                        <strong>Skills Preview:</strong>
+                        <div class="skills-container">
+                            ${skillsPreview}
+                            ${moreSkillsText}
+                        </div>
+                    </div>
+                    <button class="view-details-btn" onclick="viewResumeDetails('${resume._id}')">
+                        <i class="fas fa-eye"></i> View Details
+                    </button>
+                `;
+                
+                return card;
+            }
+            
+            function createResumeTableRow(resume) {
+                const row = document.createElement('tr');
+                
+                // Technical skills (first 3)
+                const technicalSkills = resume.Skills?.Technical || [];
+                const skillsText = technicalSkills.slice(0, 3).join(', ') + 
+                    (technicalSkills.length > 3 ? ` (+${technicalSkills.length - 3} more)` : '');
+                
+                // Work experience (first company and role)
+                let experienceText = 'Not provided';
+                if (resume["Work Experience"] && resume["Work Experience"].length > 0) {
+                    const firstExp = resume["Work Experience"][0];
+                    experienceText = `${firstExp.Role || 'Role not specified'} at ${firstExp.Company || 'Company not specified'}`;
+                }
+                
+                // CV URL
+                const cvUrl = resume.cv_url ? `${window.location.origin}${resume.cv_url}` : '';
+                
+                row.innerHTML = `
+                    <td>${resume["Full Name"] || 'Name not found'}</td>
+                    <td>${resume["Email Address"] || 'Not provided'}</td>
+                    <td>${resume["Contact Number"] || 'Not provided'}</td>
+                    <td>${resume["Location"] || 'Not provided'}</td>
+                    <td class="skills-cell" title="${technicalSkills.join(', ')}">${skillsText}</td>
+                    <td>${experienceText}</td>
+                    <td>${cvUrl ? `<a href="${cvUrl}" target="_blank" class="cv-link">View CV</a>` : 'Not available'}</td>
+                    <td>
+                        <button class="view-details-btn" onclick="viewResumeDetails('${resume._id}')" style="width: auto; padding: 0.4rem 0.8rem;">
+                            <i class="fas fa-eye"></i> Details
+                        </button>
+                    </td>
+                `;
+                
+                return row;
+            }
+            
+            function showEmptyState(message) {
+                const container = currentView === 'cards' ? resumeCardsContainer : resumeTableBody;
+                
+                if (currentView === 'cards') {
+                    container.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <i class="fas fa-file-alt"></i>
+                            <h3>No Resumes Found</h3>
+                            <p>${message}</p>
+                            <a href="/"><i class="fas fa-upload"></i> Upload Resumes</a>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 3rem;">
+                                <div class="empty-state">
+                                    <i class="fas fa-file-alt"></i>
+                                    <h3>No Resumes Found</h3>
+                                    <p>${message}</p>
+                                    <a href="/"><i class="fas fa-upload"></i> Upload Resumes</a>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+            }
+            
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+            
+            function exportToCSV() {
+                if (currentResumes.length === 0) {
+                    showError('No resumes to export.');
+                    return;
+                }
+                
+                loadingOverlay.style.display = 'flex';
+                
+                fetch('/export_csv', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ resumes: currentResumes })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Export failed');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    loadingOverlay.style.display = 'none';
+                    
+                    // Create download link
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `resumes_export_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                })
+                .catch(error => {
+                    loadingOverlay.style.display = 'none';
+                    console.error('Error:', error);
+                    showError('An error occurred while exporting CSV. Please try again.');
+                });
+            }
+            
+            // View resume details in modal
+            window.viewResumeDetails = function(resumeId) {
+                fetch(`/get_resume/${resumeId}`)
+                .then(response => response.json())
+                .then(resume => {
+                    if (resume.error) {
+                        showError('Failed to load resume details.');
+                        return;
+                    }
+                    
+                    displayResumeDetailsModal(resume);
+                    modal.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError('Failed to load resume details.');
+                });
+            };
+            
+            function displayResumeDetailsModal(resume) {
+                const educationHTML = resume.Education && resume.Education.length > 0 ? 
+                    resume.Education.map(edu => 
+                        `<div style="margin-bottom: 0.5rem;">
+                            <strong>${edu.Degree || 'Degree not specified'}</strong><br>
+                            ${edu.Institution || 'Institution not specified'}<br>
+                            <em>${edu.Years || 'Years not specified'}</em>
+                        </div>`
+                    ).join('') : '<p>No education information found</p>';
+                
+                const experienceHTML = resume["Work Experience"] && resume["Work Experience"].length > 0 ? 
+                    resume["Work Experience"].map(exp => 
+                        `<div style="margin-bottom: 1rem;">
+                            <strong>${exp.Role || 'Role not specified'}</strong><br>
+                            ${exp.Company || 'Company not specified'}<br>
+                            <em>${exp.Years || 'Years not specified'}</em>
+                            ${exp.Description ? `<p style="margin-top: 0.5rem; font-size: 0.9rem;">${exp.Description}</p>` : ''}
+                        </div>`
+                    ).join('') : '<p>No work experience found</p>';
+                
+                const technicalSkills = resume.Skills?.Technical?.map(skill => {
+                    const isHighlighted = currentSearchSkill && 
+                        skill.toLowerCase().includes(currentSearchSkill.toLowerCase());
+                    return `<span class="skill-tag ${isHighlighted ? 'highlighted' : ''}">${skill}</span>`;
+                }).join(' ') || '<p>No technical skills found</p>';
+                
+                const softSkills = resume.Skills?.Soft?.map(skill => 
+                    `<span class="skill-tag">${skill}</span>`
+                ).join(' ') || '<p>No soft skills found</p>';
+                
+                const linkedInHTML = resume["LinkedIn"] ? 
+                    `<p><strong><i class="fab fa-linkedin"></i> LinkedIn:</strong> <a href="${resume["LinkedIn"]}" target="_blank" class="social-link">${resume["LinkedIn"]}</a></p>` : '';
+                
+                const githubHTML = resume["GitHub"] ? 
+                    `<p><strong><i class="fab fa-github"></i> GitHub:</strong> <a href="${resume["GitHub"]}" target="_blank" class="social-link">${resume["GitHub"]}</a></p>` : '';
+                
+                const cvUrlHTML = resume.cv_url ? 
+                    `<p><strong><i class="fas fa-file-pdf"></i> CV URL:</strong> <a href="${resume.cv_url}" target="_blank" class="social-link">${window.location.origin}${resume.cv_url}</a></p>` : '';
+                
+                const projectsHTML = resume.Projects && resume.Projects.length > 0 ?
+                    resume.Projects.map(project =>
+                        `<div style="margin-bottom: 1rem;">
+                            <strong>${project.Name || 'Project name not specified'}</strong><br>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;">${project.Description || 'No description available'}</p>
+                        </div>`
+                    ).join('') : '<p>No projects found</p>';
+                
+                modalContent.innerHTML = `
+                    <h3>${resume["Full Name"] || 'Name not found'}</h3>
+                    
+                    <div class="modal-section">
+                        <h5>Contact Information</h5>
+                        <p><strong>Email:</strong> ${resume["Email Address"] || 'Not provided'}</p>
+                        <p><strong>Phone:</strong> ${resume["Contact Number"] || 'Not provided'}</p>
+                        <p><strong>Location:</strong> ${resume["Location"] || 'Not provided'}</p>
+                        ${resume.filename ? `<p><strong>File:</strong> ${resume.filename}</p>` : ''}
+                        ${linkedInHTML}
+                        ${githubHTML}
+                        ${cvUrlHTML}
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h5>Education</h5>
+                        ${educationHTML}
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h5>Work Experience</h5>
+                        ${experienceHTML}
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h5>Projects</h5>
+                        ${projectsHTML}
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h5>Technical Skills</h5>
+                        <div class="skills-container">
+                            ${technicalSkills}
+                        </div>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h5>Soft Skills</h5>
+                        <div class="skills-container">
+                            ${softSkills}
+                        </div>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h5>Recommended Roles</h5>
+                        <p>${resume["Recommended Roles"] ? resume["Recommended Roles"].join(', ') : 'No recommended roles found'}</p>
+                    </div>
+                `;
+            }
+            
+            // Close modal
+            closeModal.addEventListener('click', () => { 
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>
